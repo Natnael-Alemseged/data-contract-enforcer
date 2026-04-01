@@ -5,7 +5,7 @@ info:
   title: Langsmith Trace Records
   version: 1.0.0
   owner: week7-data-contract-enforcer
-  description: 'Auto-generated contract for runs.jsonl. Source hash: d26807b3e8f1ee45...'
+  description: 'Auto-generated contract for runs.jsonl. Source hash: 987d09685c5942e1...'
 servers:
   local:
     type: local
@@ -80,20 +80,12 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - 141e7f34-a686-442d-95f1-65ee1b16956a
-    - 7992148f-b362-414f-8410-6f009301f1c9
-    - 894e2abb-4772-4def-91a6-cdc466d7fe24
-    - b55d40ca-e398-4a97-8949-db3c22c2ee41
-    - d1c76b23-31e5-4dad-921a-1941a0f3aaec
     x-null-fraction: 0.8421
   session_id:
     type: string
     required: true
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - 1ec283fa-a42d-4413-9583-fbb0a3545102
   inputs.input:
     type: string
     required: false
@@ -136,6 +128,6 @@ quality:
 lineage:
   upstream: []
   downstream: []
-x-generated-at: '2026-04-01T14:30:56.445685Z'
-x-source-hash: d26807b3e8f1ee4548827f610f98af7d7e81a54038e353e49fcd2b57e335c788
-x-snapshot-id: 0163bb9a-9f9b-4983-8363-e397a96bf8fc
+x-generated-at: '2026-04-01T14:59:27.884736Z'
+x-source-hash: 987d09685c5942e1a4d7637805e593d29684074c89763e0d3b84cd419509ab60
+x-snapshot-id: 68bc7e3c-f290-433f-8cc1-4a2afc38e018

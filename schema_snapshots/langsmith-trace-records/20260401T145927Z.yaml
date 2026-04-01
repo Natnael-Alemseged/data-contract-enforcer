@@ -1,0 +1,120 @@
+snapshot_id: 68bc7e3c-f290-433f-8cc1-4a2afc38e018
+contract_id: langsmith-trace-records
+captured_at: '2026-04-01T14:59:27.883185Z'
+columns:
+  id:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 95
+    stats: null
+  name:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 8
+    stats: null
+  run_type:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 5
+    stats: null
+  error:
+    dtype: str
+    null_fraction: 0.9578947368421052
+    cardinality: 1
+    stats: null
+  start_time:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 93
+    stats: null
+  end_time:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 95
+    stats: null
+  total_tokens:
+    dtype: int64
+    null_fraction: 0.0
+    cardinality: 94
+    stats:
+      min: 1105.0
+      max: 7025.0
+      mean: 3851.1684210526314
+      p25: 2430.0
+      p50: 3890.0
+      p75: 5121.0
+      p95: 6248.3
+      p99: 6590.720000000001
+      stddev: 1576.753793248672
+  prompt_tokens:
+    dtype: int64
+    null_fraction: 0.0
+    cardinality: 95
+    stats:
+      min: 812.0
+      max: 5987.0
+      mean: 3187.6315789473683
+      p25: 1690.0
+      p50: 3238.0
+      p75: 4489.5
+      p95: 5574.4
+      p99: 5842.240000000001
+      stddev: 1516.4731343077817
+  completion_tokens:
+    dtype: int64
+    null_fraction: 0.0
+    cardinality: 90
+    stats:
+      min: 159.0
+      max: 1197.0
+      mean: 663.5368421052632
+      p25: 398.5
+      p50: 681.0
+      p75: 884.0
+      p95: 1131.7
+      p99: 1192.3
+      stddev: 294.70583279524453
+  total_cost:
+    dtype: float64
+    null_fraction: 0.0
+    cardinality: 95
+    stats:
+      min: 0.006459
+      max: 0.035379
+      mean: 0.019515947368421053
+      p25: 0.0140925
+      p50: 0.019704
+      p75: 0.024003
+      p95: 0.0301716
+      p99: 0.03280152000000001
+      stddev: 0.006687396429690614
+  parent_run_id:
+    dtype: str
+    null_fraction: 0.8421052631578947
+    cardinality: 5
+    stats: null
+  session_id:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 1
+    stats: null
+  inputs.input:
+    dtype: str
+    null_fraction: 0.12631578947368421
+    cardinality: 1
+    stats: null
+  outputs.output:
+    dtype: str
+    null_fraction: 0.12631578947368421
+    cardinality: 1
+    stats: null
+  inputs.prompt:
+    dtype: str
+    null_fraction: 0.8736842105263158
+    cardinality: 1
+    stats: null
+  outputs.text:
+    dtype: str
+    null_fraction: 0.8736842105263158
+    cardinality: 1
+    stats: null

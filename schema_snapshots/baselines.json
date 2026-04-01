@@ -1,0 +1,142 @@
+{
+  "week3-document-refinery-extractions": {
+    "processing_time_ms": {
+      "mean": 1830.2941176470588,
+      "stddev": 619.3053532459691,
+      "n": 102
+    },
+    "token_count.input": {
+      "mean": 4888.156862745098,
+      "stddev": 1893.6101606447382,
+      "n": 102
+    },
+    "token_count.output": {
+      "mean": 629.7058823529412,
+      "stddev": 171.46489339811117,
+      "n": 102
+    },
+    "extracted_facts.confidence": {
+      "mean": 0.8681764705882352,
+      "stddev": 0.0702520796020304,
+      "n": 102
+    },
+    "extracted_facts.page_ref": {
+      "mean": 7.431372549019608,
+      "stddev": 4.168504739210829,
+      "n": 102
+    }
+  },
+  "_written_at": "2026-04-01T14:52:50.583790Z",
+  "week5-axiom-ledger-events": {
+    "sequence_number": {
+      "mean": 4.947368421052632,
+      "stddev": 3.4897065079685596,
+      "n": 95
+    },
+    "payload.context_token_count": {
+      "mean": 1000.0,
+      "stddev": 0.0,
+      "n": 5
+    },
+    "payload.validation_duration_ms": {
+      "mean": 0.0,
+      "stddev": 0.0,
+      "n": 5
+    },
+    "payload.node_sequence": {
+      "mean": 4.029411764705882,
+      "stddev": 2.1948326935292064,
+      "n": 34
+    },
+    "payload.llm_tokens_input": {
+      "mean": 120.0,
+      "stddev": 0.0,
+      "n": 5
+    },
+    "payload.llm_tokens_output": {
+      "mean": 80.0,
+      "stddev": 0.0,
+      "n": 5
+    },
+    "payload.llm_cost_usd": {
+      "mean": 0.00156,
+      "stddev": 0.0,
+      "n": 5
+    },
+    "payload.duration_ms": {
+      "mean": 536.1764705882352,
+      "stddev": 2721.355115541545,
+      "n": 34
+    },
+    "payload.tool_duration_ms": {
+      "mean": 2575.714285714286,
+      "stddev": 5883.3791229838225,
+      "n": 7
+    },
+    "payload.total_nodes_executed": {
+      "mean": 6.8,
+      "stddev": 1.4832396974191326,
+      "n": 5
+    },
+    "payload.total_llm_calls": {
+      "mean": 1.0,
+      "stddev": 0.0,
+      "n": 5
+    },
+    "payload.total_tokens_used": {
+      "mean": 200.0,
+      "stddev": 0.0,
+      "n": 5
+    },
+    "payload.total_cost_usd": {
+      "mean": 0.00156,
+      "stddev": 0.0,
+      "n": 5
+    },
+    "payload.total_duration_ms": {
+      "mean": 3652.6,
+      "stddev": 8156.2817079843435,
+      "n": 5
+    }
+  },
+  "week1-intent-code-correlator": {
+    "code_refs.line_start": {
+      "mean": 20.076923076923077,
+      "stddev": 19.098261432486197,
+      "n": 13
+    },
+    "code_refs.line_end": {
+      "mean": 55.61538461538461,
+      "stddev": 20.666149704038816,
+      "n": 13
+    },
+    "code_refs.confidence": {
+      "mean": 0.863076923076923,
+      "stddev": 0.06650621717611763,
+      "n": 13
+    }
+  },
+  "week2-digital-courtroom-verdicts": {},
+  "langsmith-trace-records": {
+    "total_tokens": {
+      "mean": 3851.1684210526314,
+      "stddev": 1576.753793248672,
+      "n": 95
+    },
+    "prompt_tokens": {
+      "mean": 3187.6315789473683,
+      "stddev": 1516.4731343077817,
+      "n": 95
+    },
+    "completion_tokens": {
+      "mean": 663.5368421052632,
+      "stddev": 294.70583279524453,
+      "n": 95
+    },
+    "total_cost": {
+      "mean": 0.019515947368421053,
+      "stddev": 0.006687396429690614,
+      "n": 95
+    }
+  }
+}

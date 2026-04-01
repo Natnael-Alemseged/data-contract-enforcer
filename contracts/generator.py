@@ -168,7 +168,11 @@ def column_to_clause(profile: dict) -> dict:
         clause["format"] = "date-time"
 
     # enum detection: low cardinality string columns where sample covers all values
+    # Skip if field looks like a UUID/ID or timestamp — those aren't enums
+    is_id_or_ts = (name.endswith("_id") or name.endswith(".id")
+                   or name.endswith("_at") or name.endswith("_time"))
     if (clause["type"] == "string"
+            and not is_id_or_ts
             and profile["cardinality_estimate"] <= 10
             and profile["cardinality_estimate"] > 0
             and profile["cardinality_estimate"] == len(profile["sample_values"])):
