@@ -1,0 +1,86 @@
+snapshot_id: f4585719-a884-41ac-ba9c-89b5cb921cc2
+contract_id: week3-document-refinery-extractions
+captured_at: '2026-04-01T14:30:37.146759Z'
+columns:
+  doc_id:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 12
+    stats: null
+  source_path:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 12
+    stats: null
+  source_hash:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 12
+    stats: null
+  extraction_model:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 1
+    stats: null
+  processing_time_ms:
+    dtype: int64
+    null_fraction: 0.0
+    cardinality: 12
+    stats:
+      min: 995.0
+      max: 3532.0
+      mean: 1830.2941176470588
+      p25: 1469.0
+      p50: 1838.5
+      p75: 2215.0
+      p95: 3476.9999999999873
+      p99: 3532.0
+      stddev: 619.3053532459691
+  extracted_at:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 12
+    stats: null
+  extracted_facts.fact_id:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 102
+    stats: null
+  extracted_facts.text:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 93
+    stats: null
+  extracted_facts.confidence:
+    dtype: float64
+    null_fraction: 0.0
+    cardinality: 82
+    stats:
+      min: 0.751
+      max: 0.987
+      mean: 0.8681764705882352
+      p25: 0.799
+      p50: 0.8634999999999999
+      p75: 0.93425
+      p95: 0.9757999999999999
+      p99: 0.98197
+      stddev: 0.0702520796020304
+  extracted_facts.page_ref:
+    dtype: int64
+    null_fraction: 0.0
+    cardinality: 16
+    stats:
+      min: 0.0
+      max: 15.0
+      mean: 7.431372549019608
+      p25: 4.0
+      p50: 8.0
+      p75: 11.0
+      p95: 14.0
+      p99: 15.0
+      stddev: 4.168504739210829
+  extracted_facts.source_excerpt:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 93
+    stats: null

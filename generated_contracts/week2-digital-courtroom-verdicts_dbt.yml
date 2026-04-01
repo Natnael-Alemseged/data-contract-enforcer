@@ -1,0 +1,55 @@
+version: 2
+models:
+- name: week2_digital_courtroom_verdicts
+  description: dbt model for week2-digital-courtroom-verdicts
+  columns:
+  - name: verdict_id
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - ace14a9e-a35c-4524-a8dd-0324cf331222
+    - unique
+  - name: target_ref
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - https://github.com/Natnael-Alemseged/Github-Evaluator
+  - name: rubric_id
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - da38f24419835c9423f13a27290a6ec748996016514c80325c157cc7b336c003
+    - unique
+  - name: rubric_version
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - 3.0.0
+  - name: overall_verdict
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - PASS
+  - name: overall_score
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - '4.9'
+  - name: confidence
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - '0.98'
+  - name: evaluated_at
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - '2026-04-01T13:28:58.152689Z'

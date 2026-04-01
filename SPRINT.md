@@ -214,8 +214,8 @@ P4B is last — it consumes everything.
 |---|----------|-------|------------|
 | OQ-1 | Week 1 output — the roo-code fork is too large to run; synthetic intent_records generated from ARCHITECTURE_NOTES context. Acceptable? | User | Pending |
 | OQ-2 | Week 3 — only 12 synthetic extraction docs. Is this enough to demonstrate statistical profiling meaningfully? Could add more documents. | Dev | Likely fine; can extend if needed |
-| OQ-3 | Embedding drift (P4A-1/2) — needs an API key that supports embeddings. OpenRouter supports this via `text-embedding-3-small`. Confirm budget OK. | User | Pending |
-| OQ-4 | PDF generation library — `reportlab` (pure Python, no system deps) vs `weasyprint` (HTML→PDF, prettier). Preference? | User | Pending |
+| OQ-3 | Embedding drift (P4A-1/2) — needs an API key that supports embeddings. OpenRouter supports this via `text-embedding-3-small`. Confirm budget OK. | User | ✅ Use OpenRouter `text-embedding-3-small` with existing `OPEN_ROUTER_KEY` |
+| OQ-4 | PDF generation library. | User | ✅ No PDF — generate report as `enforcer_report/report_{date}.md` instead |
 
 ---
 

@@ -1,0 +1,88 @@
+version: 2
+models:
+- name: langsmith_trace_records
+  description: dbt model for langsmith-trace-records
+  columns:
+  - name: id
+    tests:
+    - not_null
+  - name: name
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - audit_chain
+        - document_extraction_chain
+        - entity_resolution_chain
+        - fact_triage_chain
+        - query_agent
+  - name: run_type
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - chain
+        - embedding
+        - llm
+        - retriever
+        - tool
+  - name: error
+    tests:
+    - accepted_values:
+        values:
+        - 'RateLimitError: quota exceeded'
+  - name: start_time
+    tests:
+    - not_null
+  - name: end_time
+    tests:
+    - not_null
+  - name: total_tokens
+    tests:
+    - not_null
+  - name: prompt_tokens
+    tests:
+    - not_null
+  - name: completion_tokens
+    tests:
+    - not_null
+  - name: total_cost
+    tests:
+    - not_null
+  - name: parent_run_id
+    tests:
+    - accepted_values:
+        values:
+        - 141e7f34-a686-442d-95f1-65ee1b16956a
+        - 7992148f-b362-414f-8410-6f009301f1c9
+        - 894e2abb-4772-4def-91a6-cdc466d7fe24
+        - b55d40ca-e398-4a97-8949-db3c22c2ee41
+        - d1c76b23-31e5-4dad-921a-1941a0f3aaec
+    - unique
+  - name: session_id
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - 1ec283fa-a42d-4413-9583-fbb0a3545102
+    - unique
+  - name: inputs_input
+    tests:
+    - accepted_values:
+        values:
+        - '...'
+  - name: outputs_output
+    tests:
+    - accepted_values:
+        values:
+        - '...'
+  - name: inputs_prompt
+    tests:
+    - accepted_values:
+        values:
+        - '...'
+  - name: outputs_text
+    tests:
+    - accepted_values:
+        values:
+        - '...'

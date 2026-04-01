@@ -1,0 +1,141 @@
+kind: DataContract
+apiVersion: v3.0.0
+id: langsmith-trace-records
+info:
+  title: Langsmith Trace Records
+  version: 1.0.0
+  owner: week7-data-contract-enforcer
+  description: 'Auto-generated contract for runs.jsonl. Source hash: d26807b3e8f1ee45...'
+servers:
+  local:
+    type: local
+    path: outputs/traces/runs.jsonl
+    format: jsonl
+terms:
+  usage: Internal inter-system data contract. Do not publish.
+schema:
+  id:
+    type: string
+    required: true
+  name:
+    type: string
+    required: true
+  run_type:
+    type: string
+    required: true
+    enum:
+    - chain
+    - embedding
+    - llm
+    - retriever
+    - tool
+  error:
+    type: string
+    required: false
+    enum:
+    - 'RateLimitError: quota exceeded'
+    x-null-fraction: 0.9579
+  start_time:
+    type: string
+    required: true
+    format: date-time
+  end_time:
+    type: string
+    required: true
+    format: date-time
+  total_tokens:
+    type: integer
+    required: true
+    x-observed:
+      min: 1105.0
+      max: 7025.0
+      mean: 3851.1684
+      stddev: 1576.7538
+  prompt_tokens:
+    type: integer
+    required: true
+    x-observed:
+      min: 812.0
+      max: 5987.0
+      mean: 3187.6316
+      stddev: 1516.4731
+  completion_tokens:
+    type: integer
+    required: true
+    x-observed:
+      min: 159.0
+      max: 1197.0
+      mean: 663.5368
+      stddev: 294.7058
+  total_cost:
+    type: number
+    required: true
+    x-observed:
+      min: 0.006459
+      max: 0.035379
+      mean: 0.0195
+      stddev: 0.0067
+  parent_run_id:
+    type: string
+    required: false
+    format: uuid
+    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    enum:
+    - 141e7f34-a686-442d-95f1-65ee1b16956a
+    - 7992148f-b362-414f-8410-6f009301f1c9
+    - 894e2abb-4772-4def-91a6-cdc466d7fe24
+    - b55d40ca-e398-4a97-8949-db3c22c2ee41
+    - d1c76b23-31e5-4dad-921a-1941a0f3aaec
+    x-null-fraction: 0.8421
+  session_id:
+    type: string
+    required: true
+    format: uuid
+    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    enum:
+    - 1ec283fa-a42d-4413-9583-fbb0a3545102
+  inputs.input:
+    type: string
+    required: false
+    enum:
+    - '...'
+    x-null-fraction: 0.1263
+  outputs.output:
+    type: string
+    required: false
+    enum:
+    - '...'
+    x-null-fraction: 0.1263
+  inputs.prompt:
+    type: string
+    required: false
+    enum:
+    - '...'
+    x-null-fraction: 0.8737
+  outputs.text:
+    type: string
+    required: false
+    enum:
+    - '...'
+    x-null-fraction: 0.8737
+quality:
+  type: SodaChecks
+  specification:
+    checks for langsmith_trace_records:
+    - '- row_count >= 1'
+    - '- missing_count(id) = 0'
+    - '- missing_count(name) = 0'
+    - '- missing_count(run_type) = 0'
+    - '- missing_count(start_time) = 0'
+    - '- missing_count(end_time) = 0'
+    - '- missing_count(total_tokens) = 0'
+    - '- missing_count(prompt_tokens) = 0'
+    - '- missing_count(completion_tokens) = 0'
+    - '- missing_count(total_cost) = 0'
+    - '- missing_count(session_id) = 0'
+lineage:
+  upstream: []
+  downstream: []
+x-generated-at: '2026-04-01T14:30:56.445685Z'
+x-source-hash: d26807b3e8f1ee4548827f610f98af7d7e81a54038e353e49fcd2b57e335c788
+x-snapshot-id: 0163bb9a-9f9b-4983-8363-e397a96bf8fc

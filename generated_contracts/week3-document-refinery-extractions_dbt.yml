@@ -1,0 +1,43 @@
+version: 2
+models:
+- name: week3_document_refinery_extractions
+  description: dbt model for week3-document-refinery-extractions
+  columns:
+  - name: doc_id
+    tests:
+    - not_null
+    - unique
+  - name: source_path
+    tests:
+    - not_null
+  - name: source_hash
+    tests:
+    - not_null
+  - name: extraction_model
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - claude-3-5-sonnet-20241022
+  - name: processing_time_ms
+    tests:
+    - not_null
+  - name: extracted_at
+    tests:
+    - not_null
+  - name: extracted_facts_fact_id
+    tests:
+    - not_null
+    - unique
+  - name: extracted_facts_text
+    tests:
+    - not_null
+  - name: extracted_facts_confidence
+    tests:
+    - not_null
+  - name: extracted_facts_page_ref
+    tests:
+    - not_null
+  - name: extracted_facts_source_excerpt
+    tests:
+    - not_null

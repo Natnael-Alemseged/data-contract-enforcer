@@ -1,0 +1,71 @@
+snapshot_id: ebcd3bc1-d399-40a6-bc3c-cca3451c28b9
+contract_id: week1-intent-code-correlator
+captured_at: '2026-04-01T14:30:56.085487Z'
+columns:
+  intent_id:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 12
+    stats: null
+  description:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 12
+    stats: null
+  created_at:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 10
+    stats: null
+  code_refs.file:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 12
+    stats: null
+  code_refs.line_start:
+    dtype: int64
+    null_fraction: 0.0
+    cardinality: 12
+    stats:
+      min: 1.0
+      max: 70.0
+      mean: 20.076923076923077
+      p25: 8.0
+      p50: 15.0
+      p75: 22.0
+      p95: 54.999999999999964
+      p99: 66.99999999999997
+      stddev: 19.098261432486197
+  code_refs.line_end:
+    dtype: int64
+    null_fraction: 0.0
+    cardinality: 13
+    stats:
+      min: 29.0
+      max: 95.0
+      mean: 55.61538461538461
+      p25: 38.0
+      p50: 55.0
+      p75: 67.0
+      p95: 87.19999999999999
+      p99: 93.43999999999998
+      stddev: 20.666149704038816
+  code_refs.symbol:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 13
+    stats: null
+  code_refs.confidence:
+    dtype: float64
+    null_fraction: 0.0
+    cardinality: 13
+    stats:
+      min: 0.76
+      max: 0.97
+      mean: 0.863076923076923
+      p25: 0.82
+      p50: 0.87
+      p75: 0.91
+      p95: 0.958
+      p99: 0.9675999999999999
+      stddev: 0.06650621717611763

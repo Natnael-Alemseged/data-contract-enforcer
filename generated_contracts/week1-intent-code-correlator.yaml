@@ -1,0 +1,78 @@
+kind: DataContract
+apiVersion: v3.0.0
+id: week1-intent-code-correlator
+info:
+  title: Week1 Intent Code Correlator
+  version: 1.0.0
+  owner: week7-data-contract-enforcer
+  description: 'Auto-generated contract for intent_records.jsonl. Source hash: fe04a0bb85c40b31...'
+servers:
+  local:
+    type: local
+    path: outputs/week1/intent_records.jsonl
+    format: jsonl
+terms:
+  usage: Internal inter-system data contract. Do not publish.
+schema:
+  intent_id:
+    type: string
+    required: true
+    format: uuid
+    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+  description:
+    type: string
+    required: true
+  created_at:
+    type: string
+    required: true
+    format: date-time
+  code_refs.file:
+    type: string
+    required: true
+  code_refs.line_start:
+    type: integer
+    required: true
+    x-observed:
+      min: 1.0
+      max: 70.0
+      mean: 20.0769
+      stddev: 19.0983
+  code_refs.line_end:
+    type: integer
+    required: true
+    x-observed:
+      min: 29.0
+      max: 95.0
+      mean: 55.6154
+      stddev: 20.6661
+  code_refs.symbol:
+    type: string
+    required: true
+  code_refs.confidence:
+    type: number
+    required: true
+    minimum: 0.0
+    maximum: 1.0
+    description: Confidence score. MUST remain float 0.0–1.0. BREAKING CHANGE if converted
+      to integer 0–100.
+quality:
+  type: SodaChecks
+  specification:
+    checks for week1_intent_code_correlator:
+    - '- row_count >= 1'
+    - '- missing_count(intent_id) = 0'
+    - '- missing_count(description) = 0'
+    - '- missing_count(created_at) = 0'
+    - '- missing_count(code_refs_file) = 0'
+    - '- missing_count(code_refs_line_start) = 0'
+    - '- missing_count(code_refs_line_end) = 0'
+    - '- missing_count(code_refs_symbol) = 0'
+    - '- missing_count(code_refs_confidence) = 0'
+    - '- min(code_refs_confidence) >= 0.0'
+    - '- max(code_refs_confidence) <= 1.0'
+lineage:
+  upstream: []
+  downstream: []
+x-generated-at: '2026-04-01T14:30:56.086521Z'
+x-source-hash: fe04a0bb85c40b31c9aaf9c0474506f4023ddb784cfb77394b2dd73ba04820f4
+x-snapshot-id: ebcd3bc1-d399-40a6-bc3c-cca3451c28b9

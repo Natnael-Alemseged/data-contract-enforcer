@@ -1,0 +1,88 @@
+kind: DataContract
+apiVersion: v3.0.0
+id: week2-digital-courtroom-verdicts
+info:
+  title: Week2 Digital Courtroom Verdicts
+  version: 1.0.0
+  owner: week7-data-contract-enforcer
+  description: 'Auto-generated contract for verdicts_canonical.jsonl. Source hash:
+    8ddbfe0092870007...'
+servers:
+  local:
+    type: local
+    path: outputs/week2/verdicts_canonical.jsonl
+    format: jsonl
+terms:
+  usage: Internal inter-system data contract. Do not publish.
+schema:
+  verdict_id:
+    type: string
+    required: true
+    format: uuid
+    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    enum:
+    - ace14a9e-a35c-4524-a8dd-0324cf331222
+  target_ref:
+    type: string
+    required: true
+    enum:
+    - https://github.com/Natnael-Alemseged/Github-Evaluator
+  rubric_id:
+    type: string
+    required: true
+    format: uuid
+    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    enum:
+    - da38f24419835c9423f13a27290a6ec748996016514c80325c157cc7b336c003
+  rubric_version:
+    type: string
+    required: true
+    enum:
+    - 3.0.0
+  overall_verdict:
+    type: string
+    required: true
+    enum:
+    - PASS
+  overall_score:
+    type: number
+    required: true
+    x-observed:
+      min: 4.9
+      max: 4.9
+      mean: 4.9
+      stddev: 0.0
+  confidence:
+    type: number
+    required: true
+    minimum: 0.0
+    maximum: 1.0
+    description: Confidence score. MUST remain float 0.0–1.0. BREAKING CHANGE if converted
+      to integer 0–100.
+  evaluated_at:
+    type: string
+    required: true
+    format: date-time
+    enum:
+    - '2026-04-01T13:28:58.152689Z'
+quality:
+  type: SodaChecks
+  specification:
+    checks for week2_digital_courtroom_verdicts:
+    - '- row_count >= 1'
+    - '- missing_count(verdict_id) = 0'
+    - '- missing_count(target_ref) = 0'
+    - '- missing_count(rubric_id) = 0'
+    - '- missing_count(rubric_version) = 0'
+    - '- missing_count(overall_verdict) = 0'
+    - '- missing_count(overall_score) = 0'
+    - '- missing_count(confidence) = 0'
+    - '- min(confidence) >= 0.0'
+    - '- max(confidence) <= 1.0'
+    - '- missing_count(evaluated_at) = 0'
+lineage:
+  upstream: []
+  downstream: []
+x-generated-at: '2026-04-01T14:30:56.266198Z'
+x-source-hash: 8ddbfe009287000782fd8170000836ee77d9132d21173595e136a672e284c0e4
+x-snapshot-id: fc20b112-bd5b-47b1-8ea8-98dc5ac31fb6
