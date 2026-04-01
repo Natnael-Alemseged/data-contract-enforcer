@@ -1,0 +1,27 @@
+# Environment & secrets
+.env
+.env.*
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Generated outputs (large data files)
+outputs/
+schema_snapshots/embedding_baselines.npz
+
+# OS
+.DS_Store
