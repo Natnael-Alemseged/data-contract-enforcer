@@ -19,6 +19,7 @@ OUTPUTS_DIR      = ROOT / "outputs"
 SNAPSHOTS_DIR    = ROOT / "schema_snapshots"
 REPORTS_DIR      = ROOT / "validation_reports"
 VIOLATIONS_FILE  = ROOT / "violation_log" / "violations.jsonl"
+MIGRATION_DIR    = ROOT / "migration_reports"
 
 st.set_page_config(
     page_title="Data Contract Enforcer",
@@ -72,7 +73,7 @@ def severity_color(s: str) -> str:
 st.title("📋 Data Contract Enforcer")
 page = st.radio(
     "View",
-    ["🏠 Overview", "📄 Contracts (P1)", "✅ Validation Reports (P2A)", "🔍 Violations (P2B)"],
+    ["🏠 Overview", "📄 Contracts (P1)", "✅ Validation Reports (P2A)", "🔍 Violations (P2B)", "📈 Schema Evolution (P3)"],
     horizontal=True,
     label_visibility="collapsed",
 )
@@ -429,5 +430,108 @@ elif page == "🔍 Violations (P2B)":
         ])
         st.bar_chart(df_blast.set_index("Node"))
 
+# ═══════════════════════════════════════════════════════════════════════════════
+# PAGE: SCHEMA EVOLUTION (Phase 3)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+elif page == "📈 Schema Evolution (P3)":
+    if not MIGRATION_DIR.exists():
+        st.warning("No migration reports found. Run `contracts/schema_analyzer.py` first.")
+        st.stop()
+
+    evol_files = sorted(MIGRATION_DIR.glob("*_evolution.jsonl"))
+    if not evol_files:
+        st.warning("No evolution reports found.")
+        st.stop()
+
+    # Load all evolution reports
+    all_diffs = []
+    for ef in evol_files:
+        with open(ef) as fh:
+            for line in fh:
+                if line.strip():
+                    all_diffs.append(json.loads(line))
+
+    # Summary metrics
+    total_breaking = sum(d["impact"]["breaking_count"] for d in all_diffs)
+    total_warn     = sum(d["impact"]["warn_count"] for d in all_diffs)
+    total_compat   = sum(d["impact"]["compatible_count"] for d in all_diffs)
+    contracts_with_breaks = sum(1 for d in all_diffs if d["impact"]["breaking_count"] > 0)
+
+    c1, c2, c3, c4 = st.columns(4)
+    c1.metric("Snapshot diffs analyzed", len(all_diffs))
+    c2.metric("Breaking changes", total_breaking, delta="migration required" if total_breaking else None,
+              delta_color="inverse")
+    c3.metric("Warnings", total_warn)
+    c4.metric("Compatible changes", total_compat)
+
+    # Overview table
+    st.subheader("Evolution Summary by Contract")
+    summary_rows = []
+    for d in all_diffs:
+        imp = d["impact"]
+        verdict_icon = "🔴" if imp["breaking_count"] > 0 else ("🟡" if imp["warn_count"] > 0 else "✅")
+        summary_rows.append({
+            "": verdict_icon,
+            "Contract": d["contract_id"],
+            "Old Snapshot": d["old_snapshot"]["file"],
+            "New Snapshot": d["new_snapshot"]["file"],
+            "Breaking": imp["breaking_count"],
+            "Warn": imp["warn_count"],
+            "Compatible": imp["compatible_count"],
+            "Total Changes": imp["total_changes"],
+            "Recommendation": imp["recommendation"][:60],
+        })
+    st.dataframe(pd.DataFrame(summary_rows), use_container_width=True, hide_index=True)
+
+    # Per-diff detail
+    st.subheader("Diff Details")
+    diff_labels = [
+        f"{d['contract_id']} · {d['old_snapshot']['file']} → {d['new_snapshot']['file']}"
+        for d in all_diffs
+    ]
+    sel_idx = st.selectbox("Select diff", range(len(all_diffs)), format_func=lambda i: diff_labels[i])
+    diff = all_diffs[sel_idx]
+    imp  = diff["impact"]
+
+    # Recommendation banner
+    if imp["breaking_count"] > 0:
+        st.error(f"🚨 {imp['recommendation']}")
+    elif imp["warn_count"] > 0:
+        st.warning(f"⚠️ {imp['recommendation']}")
+    else:
+        st.success(f"✅ {imp['recommendation']}")
+
+    if imp.get("breaking_columns"):
+        st.markdown("**Breaking columns:** " + ", ".join(f"`{c}`" for c in imp["breaking_columns"]))
+
+    # Changes table
+    changes = diff.get("changes", [])
+    if changes:
+        change_rows = []
+        for ch in changes:
+            marker = {"BREAKING": "🔴", "WARN": "🟡", "COMPATIBLE": "✅"}.get(ch["severity"], "⚪")
+            change_rows.append({
+                "": marker,
+                "Severity": ch["severity"],
+                "Column": ch["column"],
+                "Change Type": ch["change_type"],
+                "Detail": ch["detail"][:80],
+                "Old Value": str(ch.get("old_value", "—"))[:30],
+                "New Value": str(ch.get("new_value", "—"))[:30],
+            })
+        st.dataframe(pd.DataFrame(change_rows), use_container_width=True, hide_index=True)
+    else:
+        st.info("No changes detected between these snapshots.")
+
+    # Breaking change bar chart
+    if any(d["impact"]["breaking_count"] > 0 for d in all_diffs):
+        st.subheader("Breaking Changes by Contract")
+        chart_data = pd.DataFrame([
+            {"Contract": d["contract_id"], "Breaking": d["impact"]["breaking_count"]}
+            for d in all_diffs if d["impact"]["breaking_count"] > 0
+        ]).set_index("Contract")
+        st.bar_chart(chart_data)
+
 st.divider()
-st.caption("Data Contract Enforcer · Week 7 · Phases 1–2 complete · Phase 3 next: SchemaEvolutionAnalyzer")
+st.caption("Data Contract Enforcer · Week 7 · Phases 1–3 complete")

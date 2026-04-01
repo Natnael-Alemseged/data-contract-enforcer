@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "data-contract-enforcer"
+version = "0.0.0"
+requires-python = ">=3.10"
+dependencies = [
+  "numpy",
+  "pandas",
+  "pyyaml",
+  "streamlit",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pandas-stubs==2.3.3.260113",
+]
+
+[tool.setuptools]
+py-modules = ["main"]
+

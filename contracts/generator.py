@@ -24,6 +24,19 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import yaml
+from dotenv import load_dotenv
+
+load_dotenv()
+
+try:
+    from langsmith import traceable as _traceable
+    _LANGSMITH_AVAILABLE = True
+except ImportError:
+    _LANGSMITH_AVAILABLE = False
+    def _traceable(**_kw):
+        def _wrap(fn):
+            return fn
+        return _wrap
 
 # ── helpers ──────────────────────────────────────────────────────────────────
 
@@ -248,6 +261,7 @@ def is_ambiguous(profile: dict) -> bool:
     return not obvious
 
 
+@_traceable(name="contract-llm-annotation", run_type="llm")
 def annotate_with_llm(profiles: dict[str, dict], table_name: str) -> dict[str, dict]:
     """
     For ambiguous columns, call Claude via OpenRouter to get:
@@ -448,6 +462,7 @@ def write_snapshot(contract_id: str, profiles: dict[str, dict], contract: dict) 
 
 # ── Main pipeline ─────────────────────────────────────────────────────────────
 
+@_traceable(name="contract-generator", run_type="chain")
 def generate(
     source: Path,
     contract_id: str,

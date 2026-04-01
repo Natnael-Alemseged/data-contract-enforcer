@@ -5,11 +5,11 @@ info:
   title: Week5 Axiom Ledger Events
   version: 1.0.0
   owner: week7-data-contract-enforcer
-  description: 'Auto-generated contract for events_canonical.jsonl. Source hash: 18656641a66465b6...'
+  description: 'Auto-generated contract for events.jsonl. Source hash: 84874e44c9ecac48...'
 servers:
   local:
     type: local
-    path: outputs/week5/events_canonical.jsonl
+    path: outputs/week5/events.jsonl
     format: jsonl
 terms:
   usage: Internal inter-system data contract. Do not publish.
@@ -19,18 +19,12 @@ schema:
     required: true
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-  event_type:
-    type: string
-    required: true
-  aggregate_id:
+  stream_id:
     type: string
     required: true
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-  aggregate_type:
-    type: string
-    required: true
-  sequence_number:
+  stream_position:
     type: integer
     required: true
     x-observed:
@@ -38,16 +32,25 @@ schema:
       max: 13.0
       mean: 4.9474
       stddev: 3.4897
-  schema_version:
+  global_position:
+    type: integer
+    required: true
+    x-observed:
+      min: 0.0
+      max: 94.0
+      mean: 47.0
+      stddev: 27.5681
+  event_type:
     type: string
     required: true
-    enum:
-    - '1'
-    - '2'
-  occurred_at:
-    type: string
+  event_version:
+    type: integer
     required: true
-    format: date-time
+    x-observed:
+      min: 1.0
+      max: 2.0
+      mean: 1.0211
+      stddev: 0.1443
   recorded_at:
     type: string
     required: true
@@ -57,56 +60,23 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - APEX-0001
     x-null-fraction: 0.8947
   payload.application_id:
     type: string
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - APEX-0001
     x-null-fraction: 0.5158
   payload.created_at:
     type: string
     required: false
     format: date-time
-    enum:
-    - '2026-04-01T16:09:02.378774'
     x-null-fraction: 0.9895
-  metadata.causation_id:
-    type: string
-    required: false
-    format: uuid
-    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    x-null-fraction: 1.0
-  metadata.correlation_id:
-    type: string
-    required: true
-    format: uuid
-    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-  metadata.user_id:
-    type: string
-    required: true
-    format: uuid
-    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - system
-  metadata.source_service:
-    type: string
-    required: true
-    enum:
-    - week5-axiom-ledger
   payload.document_id:
     type: string
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - doc-application_proposal-APEX-000
-    - doc-balance_sheet-APEX-000
-    - doc-income_statement-APEX-000
     x-null-fraction: 0.8842
   payload.document_type:
     type: string
@@ -168,10 +138,6 @@ schema:
     type: string
     required: false
     format: date-time
-    enum:
-    - '2026-04-01T16:09:02.379074'
-    - '2026-04-01T16:09:02.379095'
-    - '2026-04-01T16:09:02.379113'
     x-null-fraction: 0.9684
   payload.uploaded_by:
     type: string
@@ -184,12 +150,6 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - sess-com-f012f31e
-    - sess-cre-1284d40d
-    - sess-dec-1f57ec3a
-    - sess-doc-a99d8859
-    - sess-fra-c5267180
     x-null-fraction: 0.2211
   payload.agent_type:
     type: string
@@ -206,12 +166,6 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - agent-compliance-cli
-    - agent-credit-cli
-    - agent-docproc-cli
-    - agent-fraud-cli
-    - agent-orch-cli
     x-null-fraction: 0.9474
   payload.model_version:
     type: string
@@ -245,6 +199,12 @@ schema:
     required: false
     format: date-time
     x-null-fraction: 0.9263
+  metadata.causation_id:
+    type: string
+    required: false
+    format: uuid
+    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-null-fraction: 0.1263
   payload.validation_duration_ms:
     type: number
     required: false
@@ -439,8 +399,6 @@ schema:
     type: string
     required: false
     format: date-time
-    enum:
-    - '2026-04-01T16:09:20.630033'
     x-null-fraction: 0.9895
   payload.documents_processed:
     type: number
@@ -470,18 +428,11 @@ schema:
     type: string
     required: false
     format: date-time
-    enum:
-    - '2026-04-01T16:09:20.630520'
     x-null-fraction: 0.9895
   payload.requested_at:
     type: string
     required: false
     format: date-time
-    enum:
-    - '2026-04-01T16:09:20.630569'
-    - '2026-04-01T16:09:20.652225'
-    - '2026-04-01T16:09:20.663526'
-    - '2026-04-01T16:09:20.677035'
     x-null-fraction: 0.9579
   payload.requested_by:
     type: string
@@ -509,12 +460,6 @@ schema:
     type: string
     required: false
     format: date-time
-    enum:
-    - '2026-04-01T16:09:20.630615'
-    - '2026-04-01T16:09:20.652256'
-    - '2026-04-01T16:09:20.663562'
-    - '2026-04-01T16:09:20.677076'
-    - '2026-04-01T16:09:20.687645'
     x-null-fraction: 0.9474
   payload.total_nodes_executed:
     type: number
@@ -575,8 +520,6 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - COMP-019
     x-null-fraction: 0.9789
   payload.requested_amount_usd:
     type: string
@@ -621,8 +564,6 @@ schema:
     type: string
     required: false
     format: date-time
-    enum:
-    - '2026-04-01T16:09:20.631278'
     x-null-fraction: 0.9895
   payload.application_reference:
     type: string
@@ -634,8 +575,6 @@ schema:
     type: string
     required: false
     format: date-time
-    enum:
-    - '2026-04-01T16:09:20.649513'
     x-null-fraction: 0.9895
   payload.has_prior_loans:
     type: string
@@ -665,9 +604,6 @@ schema:
     type: string
     required: false
     format: date-time
-    enum:
-    - '2026-04-01T16:09:20.650049'
-    - '2026-04-01T16:09:20.650612'
     x-null-fraction: 0.9789
   payload.facts_summary:
     type: string
@@ -686,8 +622,6 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - dep-f23e12df
     x-null-fraction: 0.9895
   payload.input_data_hash:
     type: string
@@ -710,10 +644,6 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - sess-com-f012f31e
-    - sess-cre-1284d40d
-    - sess-fra-c5267180
     x-null-fraction: 0.9684
   payload.screening_model_version:
     type: string
@@ -725,9 +655,6 @@ schema:
     type: string
     required: false
     format: date-time
-    enum:
-    - '2026-04-01T16:09:20.661437'
-    - '2026-04-01T16:09:20.671013'
     x-null-fraction: 0.9789
   payload.fraud_score:
     type: number
@@ -878,8 +805,6 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - sess-dec-1f57ec3a
     x-null-fraction: 0.9895
   payload.confidence:
     type: number
@@ -906,8 +831,6 @@ schema:
     type: string
     required: false
     format: date-time
-    enum:
-    - '2026-04-01T16:09:20.687549'
     x-null-fraction: 0.9895
   payload.interest_rate_pct:
     type: number
@@ -943,8 +866,6 @@ schema:
     type: string
     required: false
     format: date-time
-    enum:
-    - '2026-04-01T16:09:20.687611'
     x-null-fraction: 0.9895
 quality:
   type: SodaChecks
@@ -952,16 +873,12 @@ quality:
     checks for week5_axiom_ledger_events:
     - '- row_count >= 1'
     - '- missing_count(event_id) = 0'
+    - '- missing_count(stream_id) = 0'
+    - '- missing_count(stream_position) = 0'
+    - '- missing_count(global_position) = 0'
     - '- missing_count(event_type) = 0'
-    - '- missing_count(aggregate_id) = 0'
-    - '- missing_count(aggregate_type) = 0'
-    - '- missing_count(sequence_number) = 0'
-    - '- missing_count(schema_version) = 0'
-    - '- missing_count(occurred_at) = 0'
+    - '- missing_count(event_version) = 0'
     - '- missing_count(recorded_at) = 0'
-    - '- missing_count(metadata_correlation_id) = 0'
-    - '- missing_count(metadata_user_id) = 0'
-    - '- missing_count(metadata_source_service) = 0'
     - '- min(payload_overall_confidence) >= 0.0'
     - '- max(payload_overall_confidence) <= 1.0'
     - '- min(payload_confidence) >= 0.0'
@@ -969,6 +886,6 @@ quality:
 lineage:
   upstream: []
   downstream: []
-x-generated-at: '2026-04-01T14:30:37.430342Z'
-x-source-hash: 18656641a66465b6c394906699131668dbc59394f2cd878ac4b0dbf44ca13222
-x-snapshot-id: 49a50a33-5703-4504-9024-fb47df5aa2bd
+x-generated-at: '2026-04-01T15:22:07.554330Z'
+x-source-hash: 84874e44c9ecac48ae00e5ae3245a0e24044cc8c052aa1bda267a7c771661968
+x-snapshot-id: 412cf3de-e4c4-4299-94c3-ce4ef1672e53

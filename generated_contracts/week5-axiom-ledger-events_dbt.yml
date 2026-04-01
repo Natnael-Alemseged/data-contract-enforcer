@@ -7,10 +7,7 @@ models:
     tests:
     - not_null
     - unique
-  - name: event_type
-    tests:
-    - not_null
-  - name: aggregate_id
+  - name: stream_id
     tests:
     - not_null
     - accepted_values:
@@ -21,29 +18,24 @@ models:
         - docpkg-APEX-0001
         - loan-APEX-0001
     - unique
-  - name: aggregate_type
+  - name: stream_position
     tests:
     - not_null
-    - accepted_values:
-        values:
-        - AgentSession
-        - CreditRecord
-        - DocumentPackage
-        - FraudScreening
-        - LoanApplication
-  - name: sequence_number
+  - name: global_position
     tests:
     - not_null
-  - name: schema_version
+  - name: event_type
+    tests:
+    - not_null
+    description: The type of event that occurred, such as package creation, document
+      upload, or agent session start.
+  - name: event_version
     tests:
     - not_null
     - accepted_values:
         values:
         - '1'
         - '2'
-  - name: occurred_at
-    tests:
-    - not_null
   - name: recorded_at
     tests:
     - not_null
@@ -64,26 +56,6 @@ models:
     - accepted_values:
         values:
         - '2026-04-01T16:09:02.378774'
-  - name: metadata_causation_id
-    tests:
-    - unique
-  - name: metadata_correlation_id
-    tests:
-    - not_null
-    - unique
-  - name: metadata_user_id
-    tests:
-    - not_null
-    - accepted_values:
-        values:
-        - system
-    - unique
-  - name: metadata_source_service
-    tests:
-    - not_null
-    - accepted_values:
-        values:
-        - week5-axiom-ledger
   - name: payload_document_id
     tests:
     - accepted_values:
@@ -207,6 +179,16 @@ models:
         - '2026-04-01T16:09:18.378580'
         - '2026-04-01T16:09:20.647953'
         - '2026-04-01T16:09:20.660771'
+  - name: metadata_causation_id
+    tests:
+    - accepted_values:
+        values:
+        - sess-com-f012f31e
+        - sess-cre-1284d40d
+        - sess-dec-1f57ec3a
+        - sess-doc-a99d8859
+        - sess-fra-c5267180
+    - unique
   - name: payload_validation_duration_ms
     tests:
     - accepted_values:
@@ -222,6 +204,8 @@ models:
         - '2026-04-01T16:09:02.590363'
         - '2026-04-01T16:09:20.648957'
   - name: payload_node_name
+    description: The name of the processing node that executed the event, such as
+      validating inputs, validating document formats, or extracting an income statement.
   - name: payload_node_sequence
     tests:
     - accepted_values:

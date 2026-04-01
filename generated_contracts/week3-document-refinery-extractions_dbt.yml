@@ -10,9 +10,11 @@ models:
   - name: source_path
     tests:
     - not_null
+    description: The file path of the source document from which the data was extracted.
   - name: source_hash
     tests:
     - not_null
+    description: A unique hash value that identifies the source document.
   - name: extraction_model
     tests:
     - not_null
@@ -32,6 +34,7 @@ models:
   - name: extracted_facts_text
     tests:
     - not_null
+    description: The extracted key-value pairs of financial data from the source document.
   - name: extracted_facts_confidence
     tests:
     - not_null
@@ -41,3 +44,5 @@ models:
   - name: extracted_facts_source_excerpt
     tests:
     - not_null
+    description: The excerpt from the source document that corresponds to the extracted
+      key-value pairs.
