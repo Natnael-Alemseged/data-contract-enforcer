@@ -32,6 +32,9 @@ schema:
       max: 13.0
       mean: 4.9474
       stddev: 3.4897
+    minimum: 0
+    x-monotonic: increasing
+    description: 'Monotonically increasing per stream. Observed range: [0.0, 13.0].'
   global_position:
     type: integer
     required: true
@@ -40,6 +43,9 @@ schema:
       max: 94.0
       mean: 47.0
       stddev: 27.5681
+    minimum: 0
+    x-monotonic: increasing
+    description: 'Monotonically increasing per stream. Observed range: [0.0, 94.0].'
   event_type:
     type: string
     required: true
@@ -51,6 +57,7 @@ schema:
       max: 2.0
       mean: 1.0211
       stddev: 0.1443
+    minimum: 0
   recorded_at:
     type: string
     required: true
@@ -60,12 +67,14 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-unique: true
     x-null-fraction: 0.8947
   payload.application_id:
     type: string
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-unique: true
     x-null-fraction: 0.5158
   payload.created_at:
     type: string
@@ -77,6 +86,7 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-unique: true
     x-null-fraction: 0.8842
   payload.document_type:
     type: string
@@ -116,6 +126,7 @@ schema:
       max: 3009.0
       mean: 2883.3333
       stddev: 169.9245
+    minimum: 0
     x-null-fraction: 0.9684
   payload.file_hash:
     type: string
@@ -133,6 +144,7 @@ schema:
       max: 2024.0
       mean: 2024.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9684
   payload.uploaded_at:
     type: string
@@ -150,6 +162,7 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-unique: true
     x-null-fraction: 0.2211
   payload.agent_type:
     type: string
@@ -166,6 +179,7 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-unique: true
     x-null-fraction: 0.9474
   payload.model_version:
     type: string
@@ -193,6 +207,7 @@ schema:
       max: 1000.0
       mean: 1000.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9474
   payload.started_at:
     type: string
@@ -204,6 +219,7 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-unique: true
     x-null-fraction: 0.1263
   payload.validation_duration_ms:
     type: number
@@ -213,6 +229,7 @@ schema:
       max: 0.0
       mean: 0.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9474
   payload.validated_at:
     type: string
@@ -231,6 +248,7 @@ schema:
       max: 9.0
       mean: 4.0294
       stddev: 2.1948
+    minimum: 0
     x-null-fraction: 0.6421
   payload.llm_called:
     type: string
@@ -247,6 +265,7 @@ schema:
       max: 120.0
       mean: 120.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9474
   payload.llm_tokens_output:
     type: number
@@ -256,6 +275,7 @@ schema:
       max: 80.0
       mean: 80.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9474
   payload.llm_cost_usd:
     type: number
@@ -265,6 +285,7 @@ schema:
       max: 0.00156
       mean: 0.0016
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9474
   payload.duration_ms:
     type: number
@@ -274,6 +295,7 @@ schema:
       max: 15782.0
       mean: 536.1765
       stddev: 2721.3551
+    minimum: 0
     x-null-fraction: 0.6421
   payload.executed_at:
     type: string
@@ -288,6 +310,7 @@ schema:
       max: 1.0
       mean: 1.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9684
   payload.detected_format:
     type: string
@@ -315,6 +338,7 @@ schema:
       max: 713.0
       mean: 619.5
       stddev: 132.229
+    minimum: 0
     x-null-fraction: 0.9789
   payload.tables_extracted:
     type: number
@@ -324,6 +348,7 @@ schema:
       max: 1.0
       mean: 1.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9789
   payload.processing_ms:
     type: number
@@ -333,6 +358,7 @@ schema:
       max: 15749.0
       mean: 8997.0
       stddev: 9548.77
+    minimum: 0
     x-null-fraction: 0.9789
   payload.completed_at:
     type: string
@@ -363,6 +389,7 @@ schema:
       max: 15782.0
       mean: 2575.7143
       stddev: 5883.3791
+    minimum: 0
     x-null-fraction: 0.9263
   payload.called_at:
     type: string
@@ -408,6 +435,7 @@ schema:
       max: 2.0
       mean: 2.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9895
   payload.has_quality_flags:
     type: string
@@ -423,6 +451,7 @@ schema:
       max: 0.0
       mean: 0.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9895
   payload.ready_at:
     type: string
@@ -469,6 +498,7 @@ schema:
       max: 9.0
       mean: 6.8
       stddev: 1.4832
+    minimum: 0
     x-null-fraction: 0.9474
   payload.total_llm_calls:
     type: number
@@ -478,6 +508,7 @@ schema:
       max: 1.0
       mean: 1.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9474
   payload.total_tokens_used:
     type: number
@@ -487,6 +518,7 @@ schema:
       max: 200.0
       mean: 200.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9474
   payload.total_cost_usd:
     type: number
@@ -496,6 +528,7 @@ schema:
       max: 0.00156
       mean: 0.0016
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9474
   payload.total_duration_ms:
     type: number
@@ -505,6 +538,7 @@ schema:
       max: 18243.0
       mean: 3652.6
       stddev: 8156.2817
+    minimum: 0
     x-null-fraction: 0.9474
   payload.next_agent_triggered:
     type: string
@@ -520,6 +554,7 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-unique: true
     x-null-fraction: 0.9789
   payload.requested_amount_usd:
     type: string
@@ -541,6 +576,7 @@ schema:
       max: 36.0
       mean: 36.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9895
   payload.submission_channel:
     type: string
@@ -622,6 +658,7 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-unique: true
     x-null-fraction: 0.9895
   payload.input_data_hash:
     type: string
@@ -638,12 +675,14 @@ schema:
       max: 4.0
       mean: 4.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9895
   payload.triggered_by_event_id:
     type: string
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-unique: true
     x-null-fraction: 0.9684
   payload.screening_model_version:
     type: string
@@ -664,6 +703,7 @@ schema:
       max: 0.0
       mean: 0.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9895
   payload.risk_level:
     type: string
@@ -679,6 +719,7 @@ schema:
       max: 0.0
       mean: 0.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9895
   payload.recommendation:
     type: string
@@ -754,6 +795,7 @@ schema:
       max: 6.0
       mean: 6.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9895
   payload.rules_passed:
     type: number
@@ -763,6 +805,7 @@ schema:
       max: 5.0
       mean: 5.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9895
   payload.rules_failed:
     type: number
@@ -772,6 +815,7 @@ schema:
       max: 0.0
       mean: 0.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9895
   payload.rules_noted:
     type: number
@@ -781,6 +825,7 @@ schema:
       max: 1.0
       mean: 1.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9895
   payload.has_hard_block:
     type: string
@@ -805,6 +850,7 @@ schema:
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-unique: true
     x-null-fraction: 0.9895
   payload.confidence:
     type: number
@@ -840,6 +886,7 @@ schema:
       max: 11.5
       mean: 11.5
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9895
   payload.term_months:
     type: number
@@ -849,6 +896,7 @@ schema:
       max: 36.0
       mean: 36.0
       stddev: 0.0
+    minimum: 0
     x-null-fraction: 0.9895
   payload.approved_by:
     type: string
@@ -873,19 +921,56 @@ quality:
     checks for week5_axiom_ledger_events:
     - '- row_count >= 1'
     - '- missing_count(event_id) = 0'
+    - '- duplicate_count(event_id) = 0'
     - '- missing_count(stream_id) = 0'
+    - '- duplicate_count(stream_id) = 0'
     - '- missing_count(stream_position) = 0'
+    - '- min(stream_position) >= 0'
     - '- missing_count(global_position) = 0'
+    - '- min(global_position) >= 0'
     - '- missing_count(event_type) = 0'
     - '- missing_count(event_version) = 0'
     - '- missing_count(recorded_at) = 0'
+    - '- min(payload_context_token_count) >= 0'
+    - '- min(payload_validation_duration_ms) >= 0'
+    - '- min(payload_duration_ms) >= 0'
+    - '- min(payload_page_count) >= 0'
+    - '- min(payload_processing_ms) >= 0'
+    - '- min(payload_tool_duration_ms) >= 0'
     - '- min(payload_overall_confidence) >= 0.0'
     - '- max(payload_overall_confidence) <= 1.0'
+    - '- min(payload_quality_flag_count) >= 0'
+    - '- min(payload_total_duration_ms) >= 0'
+    - '- min(payload_analysis_duration_ms) >= 0'
     - '- min(payload_confidence) >= 0.0'
     - '- max(payload_confidence) <= 1.0'
+    - '- failed_count(payload_rules_passed + payload_rules_failed + payload_rules_noted
+      = payload_rules_evaluated) = 0  # cross-field arithmetic: rules must sum'
+    - '- failed_count(payload_llm_tokens_input + payload_llm_tokens_output = payload_total_tokens_used)
+      = 0  # token accounting: input + output must equal total'
+    - '- min(payload_llm_cost_usd) >= 0  # no negative cost'
+    - '- min(payload_fraud_score) >= 0  # fraud score non-negative'
+    - '- max(payload_fraud_score) <= 1.0  # fraud score bounded'
+x-relationships:
+  - name: rules_arithmetic
+    description: 'For compliance check events: rules_passed + rules_failed + rules_noted
+      must equal rules_evaluated'
+    expression: payload.rules_passed + payload.rules_failed + payload.rules_noted ==
+      payload.rules_evaluated
+    severity: CRITICAL
+  - name: token_accounting
+    description: 'For LLM-calling events: input tokens + output tokens must equal
+      total tokens used'
+    expression: payload.llm_tokens_input + payload.llm_tokens_output == payload.total_tokens_used
+    severity: HIGH
+  - name: stream_position_monotonicity
+    description: Within each stream_id, stream_position must be monotonically increasing
+      with no gaps
+    expression: stream_position[n] == stream_position[n-1] + 1 GROUP BY stream_id
+    severity: CRITICAL
 lineage:
   upstream: []
   downstream: []
-x-generated-at: '2026-04-01T15:22:07.554330Z'
+x-generated-at: '2026-04-01T19:43:04.415281Z'
 x-source-hash: 84874e44c9ecac48ae00e5ae3245a0e24044cc8c052aa1bda267a7c771661968
-x-snapshot-id: 412cf3de-e4c4-4299-94c3-ce4ef1672e53
+x-snapshot-id: 1611a47e-b294-4b8c-badb-993c96747f4c

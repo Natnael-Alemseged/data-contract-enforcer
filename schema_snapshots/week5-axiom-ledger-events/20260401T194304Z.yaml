@@ -1,0 +1,953 @@
+snapshot_id: 1611a47e-b294-4b8c-badb-993c96747f4c
+contract_id: week5-axiom-ledger-events
+captured_at: '2026-04-01T19:43:04.404205Z'
+columns:
+  event_id:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 95
+    stats: null
+  stream_id:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 10
+    stats: null
+  stream_position:
+    dtype: int64
+    null_fraction: 0.0
+    cardinality: 14
+    stats:
+      min: 0.0
+      max: 13.0
+      mean: 4.947368421052632
+      p25: 2.0
+      p50: 5.0
+      p75: 8.0
+      p95: 11.0
+      p99: 12.060000000000002
+      stddev: 3.4897065079685596
+  global_position:
+    dtype: int64
+    null_fraction: 0.0
+    cardinality: 95
+    stats:
+      min: 0.0
+      max: 94.0
+      mean: 47.0
+      p25: 23.5
+      p50: 47.0
+      p75: 70.5
+      p95: 89.3
+      p99: 93.06
+      stddev: 27.568097504180443
+  event_type:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 30
+    stats: null
+  event_version:
+    dtype: int64
+    null_fraction: 0.0
+    cardinality: 2
+    stats:
+      min: 1.0
+      max: 2.0
+      mean: 1.0210526315789474
+      p25: 1.0
+      p50: 1.0
+      p75: 1.0
+      p95: 1.0
+      p99: 2.0
+      stddev: 0.1443214031708876
+  recorded_at:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 95
+    stats: null
+  payload.package_id:
+    dtype: str
+    null_fraction: 0.8947368421052632
+    cardinality: 1
+    stats: null
+  payload.application_id:
+    dtype: str
+    null_fraction: 0.5157894736842106
+    cardinality: 1
+    stats: null
+  payload.created_at:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.document_id:
+    dtype: str
+    null_fraction: 0.8842105263157894
+    cardinality: 3
+    stats: null
+  payload.document_type:
+    dtype: str
+    null_fraction: 0.8947368421052632
+    cardinality: 3
+    stats: null
+  payload.document_format:
+    dtype: str
+    null_fraction: 0.968421052631579
+    cardinality: 1
+    stats: null
+  payload.filename:
+    dtype: str
+    null_fraction: 0.968421052631579
+    cardinality: 3
+    stats: null
+  payload.file_path:
+    dtype: str
+    null_fraction: 0.968421052631579
+    cardinality: 3
+    stats: null
+  payload.file_size_bytes:
+    dtype: float64
+    null_fraction: 0.968421052631579
+    cardinality: 3
+    stats:
+      min: 2690.0
+      max: 3009.0
+      mean: 2883.3333333333335
+      p25: 2820.5
+      p50: 2951.0
+      p75: 2980.0
+      p95: 3003.2
+      p99: 3007.84
+      stddev: 169.92449303538714
+  payload.file_hash:
+    dtype: str
+    null_fraction: 0.968421052631579
+    cardinality: 3
+    stats: null
+  payload.fiscal_year:
+    dtype: float64
+    null_fraction: 0.968421052631579
+    cardinality: 1
+    stats:
+      min: 2024.0
+      max: 2024.0
+      mean: 2024.0
+      p25: 2024.0
+      p50: 2024.0
+      p75: 2024.0
+      p95: 2024.0
+      p99: 2024.0
+      stddev: 0.0
+  payload.uploaded_at:
+    dtype: str
+    null_fraction: 0.968421052631579
+    cardinality: 3
+    stats: null
+  payload.uploaded_by:
+    dtype: str
+    null_fraction: 0.968421052631579
+    cardinality: 1
+    stats: null
+  payload.session_id:
+    dtype: str
+    null_fraction: 0.22105263157894736
+    cardinality: 5
+    stats: null
+  payload.agent_type:
+    dtype: str
+    null_fraction: 0.35789473684210527
+    cardinality: 5
+    stats: null
+  payload.agent_id:
+    dtype: str
+    null_fraction: 0.9473684210526315
+    cardinality: 5
+    stats: null
+  payload.model_version:
+    dtype: str
+    null_fraction: 0.9368421052631579
+    cardinality: 1
+    stats: null
+  payload.langgraph_graph_version:
+    dtype: str
+    null_fraction: 0.9473684210526315
+    cardinality: 1
+    stats: null
+  payload.context_source:
+    dtype: str
+    null_fraction: 0.9473684210526315
+    cardinality: 1
+    stats: null
+  payload.context_token_count:
+    dtype: float64
+    null_fraction: 0.9473684210526315
+    cardinality: 1
+    stats:
+      min: 1000.0
+      max: 1000.0
+      mean: 1000.0
+      p25: 1000.0
+      p50: 1000.0
+      p75: 1000.0
+      p95: 1000.0
+      p99: 1000.0
+      stddev: 0.0
+  payload.started_at:
+    dtype: str
+    null_fraction: 0.9263157894736842
+    cardinality: 7
+    stats: null
+  metadata.causation_id:
+    dtype: str
+    null_fraction: 0.12631578947368421
+    cardinality: 5
+    stats: null
+  payload.validation_duration_ms:
+    dtype: float64
+    null_fraction: 0.9473684210526315
+    cardinality: 1
+    stats:
+      min: 0.0
+      max: 0.0
+      mean: 0.0
+      p25: 0.0
+      p50: 0.0
+      p75: 0.0
+      p95: 0.0
+      p99: 0.0
+      stddev: 0.0
+  payload.validated_at:
+    dtype: str
+    null_fraction: 0.9157894736842105
+    cardinality: 8
+    stats: null
+  payload.node_name:
+    dtype: str
+    null_fraction: 0.6421052631578947
+    cardinality: 26
+    stats: null
+  payload.node_sequence:
+    dtype: float64
+    null_fraction: 0.6421052631578947
+    cardinality: 9
+    stats:
+      min: 1.0
+      max: 9.0
+      mean: 4.029411764705882
+      p25: 2.0
+      p50: 4.0
+      p75: 5.75
+      p95: 7.349999999999998
+      p99: 8.670000000000002
+      stddev: 2.1948326935292064
+  payload.llm_called:
+    dtype: object
+    null_fraction: 0.6421052631578947
+    cardinality: 2
+    stats: null
+  payload.llm_tokens_input:
+    dtype: float64
+    null_fraction: 0.9473684210526315
+    cardinality: 1
+    stats:
+      min: 120.0
+      max: 120.0
+      mean: 120.0
+      p25: 120.0
+      p50: 120.0
+      p75: 120.0
+      p95: 120.0
+      p99: 120.0
+      stddev: 0.0
+  payload.llm_tokens_output:
+    dtype: float64
+    null_fraction: 0.9473684210526315
+    cardinality: 1
+    stats:
+      min: 80.0
+      max: 80.0
+      mean: 80.0
+      p25: 80.0
+      p50: 80.0
+      p75: 80.0
+      p95: 80.0
+      p99: 80.0
+      stddev: 0.0
+  payload.llm_cost_usd:
+    dtype: float64
+    null_fraction: 0.9473684210526315
+    cardinality: 1
+    stats:
+      min: 0.00156
+      max: 0.00156
+      mean: 0.00156
+      p25: 0.00156
+      p50: 0.00156
+      p75: 0.00156
+      p95: 0.00156
+      p99: 0.00156
+      stddev: 0.0
+  payload.duration_ms:
+    dtype: float64
+    null_fraction: 0.6421052631578947
+    cardinality: 4
+    stats:
+      min: 0.0
+      max: 15782.0
+      mean: 536.1764705882352
+      p25: 0.0
+      p50: 0.0
+      p75: 0.0
+      p95: 916.7999999999956
+      p99: 11315.780000000024
+      stddev: 2721.355115541545
+  payload.executed_at:
+    dtype: str
+    null_fraction: 0.6421052631578947
+    cardinality: 34
+    stats: null
+  payload.page_count:
+    dtype: float64
+    null_fraction: 0.968421052631579
+    cardinality: 1
+    stats:
+      min: 1.0
+      max: 1.0
+      mean: 1.0
+      p25: 1.0
+      p50: 1.0
+      p75: 1.0
+      p95: 1.0
+      p99: 1.0
+      stddev: 0.0
+  payload.detected_format:
+    dtype: str
+    null_fraction: 0.968421052631579
+    cardinality: 1
+    stats: null
+  payload.pipeline_version:
+    dtype: str
+    null_fraction: 0.9789473684210527
+    cardinality: 1
+    stats: null
+  payload.extraction_model:
+    dtype: str
+    null_fraction: 0.9789473684210527
+    cardinality: 1
+    stats: null
+  payload.raw_text_length:
+    dtype: float64
+    null_fraction: 0.9789473684210527
+    cardinality: 2
+    stats:
+      min: 526.0
+      max: 713.0
+      mean: 619.5
+      p25: 572.75
+      p50: 619.5
+      p75: 666.25
+      p95: 703.65
+      p99: 711.13
+      stddev: 132.22896808188437
+  payload.tables_extracted:
+    dtype: float64
+    null_fraction: 0.9789473684210527
+    cardinality: 1
+    stats:
+      min: 1.0
+      max: 1.0
+      mean: 1.0
+      p25: 1.0
+      p50: 1.0
+      p75: 1.0
+      p95: 1.0
+      p99: 1.0
+      stddev: 0.0
+  payload.processing_ms:
+    dtype: float64
+    null_fraction: 0.9789473684210527
+    cardinality: 2
+    stats:
+      min: 2245.0
+      max: 15749.0
+      mean: 8997.0
+      p25: 5621.0
+      p50: 8997.0
+      p75: 12373.0
+      p95: 15073.8
+      p99: 15613.96
+      stddev: 9548.769973143138
+  payload.completed_at:
+    dtype: str
+    null_fraction: 0.8947368421052632
+    cardinality: 10
+    stats: null
+  payload.tool_name:
+    dtype: str
+    null_fraction: 0.9263157894736842
+    cardinality: 3
+    stats: null
+  payload.tool_input_summary:
+    dtype: str
+    null_fraction: 0.9263157894736842
+    cardinality: 6
+    stats: null
+  payload.tool_output_summary:
+    dtype: str
+    null_fraction: 0.9263157894736842
+    cardinality: 6
+    stats: null
+  payload.tool_duration_ms:
+    dtype: float64
+    null_fraction: 0.9263157894736842
+    cardinality: 3
+    stats:
+      min: 0.0
+      max: 15782.0
+      mean: 2575.714285714286
+      p25: 0.0
+      p50: 0.0
+      p75: 1124.0
+      p95: 11721.79999999999
+      p99: 14969.959999999994
+      stddev: 5883.3791229838225
+  payload.called_at:
+    dtype: str
+    null_fraction: 0.9263157894736842
+    cardinality: 7
+    stats: null
+  payload.overall_confidence:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 0.86
+      max: 0.86
+      mean: 0.86
+      p25: 0.86
+      p50: 0.86
+      p75: 0.86
+      p95: 0.86
+      p99: 0.86
+      stddev: 0.0
+  payload.is_coherent:
+    dtype: object
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.reextraction_recommended:
+    dtype: object
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.auditor_notes:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.assessed_at:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.documents_processed:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 2.0
+      max: 2.0
+      mean: 2.0
+      p25: 2.0
+      p50: 2.0
+      p75: 2.0
+      p95: 2.0
+      p99: 2.0
+      stddev: 0.0
+  payload.has_quality_flags:
+    dtype: object
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.quality_flag_count:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 0.0
+      max: 0.0
+      mean: 0.0
+      p25: 0.0
+      p50: 0.0
+      p75: 0.0
+      p95: 0.0
+      p99: 0.0
+      stddev: 0.0
+  payload.ready_at:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.requested_at:
+    dtype: str
+    null_fraction: 0.9578947368421052
+    cardinality: 4
+    stats: null
+  payload.requested_by:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.priority:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.output_summary:
+    dtype: str
+    null_fraction: 0.9473684210526315
+    cardinality: 5
+    stats: null
+  payload.written_at:
+    dtype: str
+    null_fraction: 0.9473684210526315
+    cardinality: 5
+    stats: null
+  payload.total_nodes_executed:
+    dtype: float64
+    null_fraction: 0.9473684210526315
+    cardinality: 4
+    stats:
+      min: 5.0
+      max: 9.0
+      mean: 6.8
+      p25: 6.0
+      p50: 7.0
+      p75: 7.0
+      p95: 8.6
+      p99: 8.92
+      stddev: 1.4832396974191326
+  payload.total_llm_calls:
+    dtype: float64
+    null_fraction: 0.9473684210526315
+    cardinality: 1
+    stats:
+      min: 1.0
+      max: 1.0
+      mean: 1.0
+      p25: 1.0
+      p50: 1.0
+      p75: 1.0
+      p95: 1.0
+      p99: 1.0
+      stddev: 0.0
+  payload.total_tokens_used:
+    dtype: float64
+    null_fraction: 0.9473684210526315
+    cardinality: 1
+    stats:
+      min: 200.0
+      max: 200.0
+      mean: 200.0
+      p25: 200.0
+      p50: 200.0
+      p75: 200.0
+      p95: 200.0
+      p99: 200.0
+      stddev: 0.0
+  payload.total_cost_usd:
+    dtype: float64
+    null_fraction: 0.9473684210526315
+    cardinality: 1
+    stats:
+      min: 0.00156
+      max: 0.00156
+      mean: 0.00156
+      p25: 0.00156
+      p50: 0.00156
+      p75: 0.00156
+      p95: 0.00156
+      p99: 0.00156
+      stddev: 0.0
+  payload.total_duration_ms:
+    dtype: float64
+    null_fraction: 0.9473684210526315
+    cardinality: 5
+    stats:
+      min: 3.0
+      max: 18243.0
+      mean: 3652.6
+      p25: 4.0
+      p50: 6.0
+      p75: 7.0
+      p95: 14595.799999999996
+      p99: 17513.559999999998
+      stddev: 8156.2817079843435
+  payload.next_agent_triggered:
+    dtype: str
+    null_fraction: 0.9578947368421052
+    cardinality: 4
+    stats: null
+  payload.applicant_id:
+    dtype: str
+    null_fraction: 0.9789473684210527
+    cardinality: 1
+    stats: null
+  payload.requested_amount_usd:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.loan_purpose:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.loan_term_months:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 36.0
+      max: 36.0
+      mean: 36.0
+      p25: 36.0
+      p50: 36.0
+      p75: 36.0
+      p95: 36.0
+      p99: 36.0
+      stddev: 0.0
+  payload.submission_channel:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.contact_email:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.contact_name:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.submitted_at:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.application_reference:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.opened_at:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.has_prior_loans:
+    dtype: object
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.has_defaults:
+    dtype: object
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.revenue_trajectory:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.data_hash:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.consumed_at:
+    dtype: str
+    null_fraction: 0.9789473684210527
+    cardinality: 2
+    stats: null
+  payload.facts_summary:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.quality_flags_present:
+    dtype: object
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.model_deployment_id:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.input_data_hash:
+    dtype: str
+    null_fraction: 0.9789473684210527
+    cardinality: 2
+    stats: null
+  payload.analysis_duration_ms:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 4.0
+      max: 4.0
+      mean: 4.0
+      p25: 4.0
+      p50: 4.0
+      p75: 4.0
+      p95: 4.0
+      p99: 4.0
+      stddev: 0.0
+  payload.triggered_by_event_id:
+    dtype: str
+    null_fraction: 0.968421052631579
+    cardinality: 3
+    stats: null
+  payload.screening_model_version:
+    dtype: str
+    null_fraction: 0.9789473684210527
+    cardinality: 1
+    stats: null
+  payload.initiated_at:
+    dtype: str
+    null_fraction: 0.9789473684210527
+    cardinality: 2
+    stats: null
+  payload.fraud_score:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 0.0
+      max: 0.0
+      mean: 0.0
+      p25: 0.0
+      p50: 0.0
+      p75: 0.0
+      p95: 0.0
+      p99: 0.0
+      stddev: 0.0
+  payload.risk_level:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.anomalies_found:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 0.0
+      max: 0.0
+      mean: 0.0
+      p25: 0.0
+      p50: 0.0
+      p75: 0.0
+      p95: 0.0
+      p99: 0.0
+      stddev: 0.0
+  payload.recommendation:
+    dtype: str
+    null_fraction: 0.9789473684210527
+    cardinality: 2
+    stats: null
+  payload.regulation_set_version:
+    dtype: str
+    null_fraction: 0.9789473684210527
+    cardinality: 1
+    stats: null
+  payload.rule_id:
+    dtype: str
+    null_fraction: 0.9368421052631579
+    cardinality: 6
+    stats: null
+  payload.rule_name:
+    dtype: str
+    null_fraction: 0.9368421052631579
+    cardinality: 6
+    stats: null
+  payload.rule_version:
+    dtype: str
+    null_fraction: 0.9473684210526315
+    cardinality: 1
+    stats: null
+  payload.evidence_hash:
+    dtype: str
+    null_fraction: 0.9473684210526315
+    cardinality: 5
+    stats: null
+  payload.evaluation_notes:
+    dtype: str
+    null_fraction: 0.9473684210526315
+    cardinality: 5
+    stats: null
+  payload.evaluated_at:
+    dtype: str
+    null_fraction: 0.9368421052631579
+    cardinality: 6
+    stats: null
+  payload.note_type:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.note_text:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.rules_evaluated:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 6.0
+      max: 6.0
+      mean: 6.0
+      p25: 6.0
+      p50: 6.0
+      p75: 6.0
+      p95: 6.0
+      p99: 6.0
+      stddev: 0.0
+  payload.rules_passed:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 5.0
+      max: 5.0
+      mean: 5.0
+      p25: 5.0
+      p50: 5.0
+      p75: 5.0
+      p95: 5.0
+      p99: 5.0
+      stddev: 0.0
+  payload.rules_failed:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 0.0
+      max: 0.0
+      mean: 0.0
+      p25: 0.0
+      p50: 0.0
+      p75: 0.0
+      p95: 0.0
+      p99: 0.0
+      stddev: 0.0
+  payload.rules_noted:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 1.0
+      max: 1.0
+      mean: 1.0
+      p25: 1.0
+      p50: 1.0
+      p75: 1.0
+      p95: 1.0
+      p99: 1.0
+      stddev: 0.0
+  payload.has_hard_block:
+    dtype: object
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.overall_verdict:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.all_analyses_complete:
+    dtype: object
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.orchestrator_session_id:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.confidence:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 0.78
+      max: 0.78
+      mean: 0.78
+      p25: 0.78
+      p50: 0.78
+      p75: 0.78
+      p95: 0.78
+      p99: 0.78
+      stddev: 0.0
+  payload.approved_amount_usd:
+    dtype: str
+    null_fraction: 0.9789473684210527
+    cardinality: 1
+    stats: null
+  payload.executive_summary:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.generated_at:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.interest_rate_pct:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 11.5
+      max: 11.5
+      mean: 11.5
+      p25: 11.5
+      p50: 11.5
+      p75: 11.5
+      p95: 11.5
+      p99: 11.5
+      stddev: 0.0
+  payload.term_months:
+    dtype: float64
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats:
+      min: 36.0
+      max: 36.0
+      mean: 36.0
+      p25: 36.0
+      p50: 36.0
+      p75: 36.0
+      p95: 36.0
+      p99: 36.0
+      stddev: 0.0
+  payload.approved_by:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.effective_date:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null
+  payload.approved_at:
+    dtype: str
+    null_fraction: 0.9894736842105263
+    cardinality: 1
+    stats: null

@@ -21,9 +21,13 @@ models:
   - name: stream_position
     tests:
     - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: global_position
     tests:
     - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: event_type
     tests:
     - not_null
@@ -32,10 +36,9 @@ models:
   - name: event_version
     tests:
     - not_null
-    - accepted_values:
-        values:
-        - '1'
-        - '2'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
+        max_value: 4
   - name: recorded_at
     tests:
     - not_null
@@ -92,11 +95,8 @@ models:
         - /Users/natnaelalemseged/code-projects/education/10 academy/Axiom Ledger/documents/COMP-019/income_statement_2024.pdf
   - name: payload_file_size_bytes
     tests:
-    - accepted_values:
-        values:
-        - '2690.0'
-        - '2951.0'
-        - '3009.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_file_hash
     tests:
     - accepted_values:
@@ -106,9 +106,8 @@ models:
         - doc-income_statement-APEX-000
   - name: payload_fiscal_year
     tests:
-    - accepted_values:
-        values:
-        - '2024.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_uploaded_at
     tests:
     - accepted_values:
@@ -167,9 +166,9 @@ models:
         - fresh
   - name: payload_context_token_count
     tests:
-    - accepted_values:
-        values:
-        - '1000.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
+        max_value: 2000
   - name: payload_started_at
     tests:
     - accepted_values:
@@ -191,9 +190,8 @@ models:
     - unique
   - name: payload_validation_duration_ms
     tests:
-    - accepted_values:
-        values:
-        - '0.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_validated_at
     tests:
     - accepted_values:
@@ -204,17 +202,13 @@ models:
         - '2026-04-01T16:09:02.590363'
         - '2026-04-01T16:09:20.648957'
   - name: payload_node_name
-    description: The name of the processing node that executed the event, such as
-      validating inputs, validating document formats, or extracting an income statement.
+    description: The name of the node or process that was involved in the event, such
+      as validating inputs, validating document formats, or extracting an income statement.
   - name: payload_node_sequence
     tests:
-    - accepted_values:
-        values:
-        - '1.0'
-        - '2.0'
-        - '3.0'
-        - '4.0'
-        - '5.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
+        max_value: 18
   - name: payload_llm_called
     tests:
     - accepted_values:
@@ -223,33 +217,26 @@ models:
         - 'True'
   - name: payload_llm_tokens_input
     tests:
-    - accepted_values:
-        values:
-        - '120.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_llm_tokens_output
     tests:
-    - accepted_values:
-        values:
-        - '80.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_llm_cost_usd
     tests:
-    - accepted_values:
-        values:
-        - '0.00156'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_duration_ms
     tests:
-    - accepted_values:
-        values:
-        - '0.0'
-        - '15782.0'
-        - '200.0'
-        - '2248.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_executed_at
   - name: payload_page_count
     tests:
-    - accepted_values:
-        values:
-        - '1.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
+        max_value: 2
   - name: payload_detected_format
     tests:
     - accepted_values:
@@ -267,21 +254,16 @@ models:
         - refinery.run_extraction
   - name: payload_raw_text_length
     tests:
-    - accepted_values:
-        values:
-        - '526.0'
-        - '713.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_tables_extracted
     tests:
-    - accepted_values:
-        values:
-        - '1.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_processing_ms
     tests:
-    - accepted_values:
-        values:
-        - '15749.0'
-        - '2245.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_completed_at
     tests:
     - accepted_values:
@@ -318,11 +300,8 @@ models:
         - status=completed strategy=layout
   - name: payload_tool_duration_ms
     tests:
-    - accepted_values:
-        values:
-        - '0.0'
-        - '15782.0'
-        - '2248.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_called_at
     tests:
     - accepted_values:
@@ -334,9 +313,9 @@ models:
         - '2026-04-01T16:09:20.662031'
   - name: payload_overall_confidence
     tests:
-    - accepted_values:
-        values:
-        - '0.86'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0.0
+        max_value: 1.0
   - name: payload_is_coherent
     tests:
     - accepted_values:
@@ -359,9 +338,8 @@ models:
         - '2026-04-01T16:09:20.630033'
   - name: payload_documents_processed
     tests:
-    - accepted_values:
-        values:
-        - '2.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_has_quality_flags
     tests:
     - accepted_values:
@@ -369,9 +347,9 @@ models:
         - 'False'
   - name: payload_quality_flag_count
     tests:
-    - accepted_values:
-        values:
-        - '0.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
+        max_value: 100
   - name: payload_ready_at
     tests:
     - accepted_values:
@@ -415,36 +393,24 @@ models:
         - '2026-04-01T16:09:20.687645'
   - name: payload_total_nodes_executed
     tests:
-    - accepted_values:
-        values:
-        - '5.0'
-        - '6.0'
-        - '7.0'
-        - '9.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_total_llm_calls
     tests:
-    - accepted_values:
-        values:
-        - '1.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_total_tokens_used
     tests:
-    - accepted_values:
-        values:
-        - '200.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_total_cost_usd
     tests:
-    - accepted_values:
-        values:
-        - '0.00156'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_total_duration_ms
     tests:
-    - accepted_values:
-        values:
-        - '18243.0'
-        - '3.0'
-        - '4.0'
-        - '6.0'
-        - '7.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_next_agent_triggered
     tests:
     - accepted_values:
@@ -471,9 +437,8 @@ models:
         - working_capital
   - name: payload_loan_term_months
     tests:
-    - accepted_values:
-        values:
-        - '36.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_submission_channel
     tests:
     - accepted_values:
@@ -554,9 +519,8 @@ models:
         - de65d739b3fc18a8
   - name: payload_analysis_duration_ms
     tests:
-    - accepted_values:
-        values:
-        - '4.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_triggered_by_event_id
     tests:
     - accepted_values:
@@ -578,9 +542,8 @@ models:
         - '2026-04-01T16:09:20.671013'
   - name: payload_fraud_score
     tests:
-    - accepted_values:
-        values:
-        - '0.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_risk_level
     tests:
     - accepted_values:
@@ -588,9 +551,8 @@ models:
         - LOW
   - name: payload_anomalies_found
     tests:
-    - accepted_values:
-        values:
-        - '0.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_recommendation
     tests:
     - accepted_values:
@@ -665,24 +627,20 @@ models:
         - Jurisdiction qualifies for Community Reinvestment Act consideration.
   - name: payload_rules_evaluated
     tests:
-    - accepted_values:
-        values:
-        - '6.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_rules_passed
     tests:
-    - accepted_values:
-        values:
-        - '5.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_rules_failed
     tests:
-    - accepted_values:
-        values:
-        - '0.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_rules_noted
     tests:
-    - accepted_values:
-        values:
-        - '1.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_has_hard_block
     tests:
     - accepted_values:
@@ -706,9 +664,9 @@ models:
     - unique
   - name: payload_confidence
     tests:
-    - accepted_values:
-        values:
-        - '0.78'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0.0
+        max_value: 1.0
   - name: payload_approved_amount_usd
     tests:
     - accepted_values:
@@ -727,14 +685,12 @@ models:
         - '2026-04-01T16:09:20.687549'
   - name: payload_interest_rate_pct
     tests:
-    - accepted_values:
-        values:
-        - '11.5'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_term_months
     tests:
-    - accepted_values:
-        values:
-        - '36.0'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: payload_approved_by
     tests:
     - accepted_values:
