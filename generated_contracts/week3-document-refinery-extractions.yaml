@@ -76,7 +76,6 @@ quality:
     checks for week3_document_refinery_extractions:
     - '- row_count >= 1'
     - '- missing_count(doc_id) = 0'
-    - '- duplicate_count(doc_id) = 0'
     - '- missing_count(source_path) = 0'
     - '- missing_count(source_hash) = 0'
     - '- missing_count(extraction_model) = 0'
@@ -95,6 +94,6 @@ quality:
 lineage:
   upstream: []
   downstream: []
-x-generated-at: '2026-04-01T19:42:13.575234Z'
+x-generated-at: '2026-04-01T20:10:48.329115Z'
 x-source-hash: 36a082eafe5b811e2383b2e22cbbb31db61330c17ba68be169419479aef0dd11
-x-snapshot-id: c1ee2503-58ba-4f26-a065-e7292a51cd83
+x-snapshot-id: 60686a06-08ff-49b4-8966-ef4a0c086722

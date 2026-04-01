@@ -3,36 +3,13 @@ models:
 - name: week5_axiom_ledger_events
   description: dbt model for week5-axiom-ledger-events
   columns:
-  - name: event_id
-    tests:
-    - not_null
-    - unique
   - name: stream_id
     tests:
     - not_null
-    - accepted_values:
-        values:
-        - agent-credit_analysis-sess-cre-1284d40d
-        - agent-document_processing-sess-doc-a99d8859
-        - credit-APEX-0001
-        - docpkg-APEX-0001
-        - loan-APEX-0001
     - unique
-  - name: stream_position
-    tests:
-    - not_null
-    - dbt_expectations.expect_column_values_to_be_between:
-        min_value: 0
-  - name: global_position
-    tests:
-    - not_null
-    - dbt_expectations.expect_column_values_to_be_between:
-        min_value: 0
   - name: event_type
     tests:
     - not_null
-    description: The type of event that occurred, such as package creation, document
-      upload, or agent session start.
   - name: event_version
     tests:
     - not_null
@@ -42,30 +19,46 @@ models:
   - name: recorded_at
     tests:
     - not_null
-  - name: payload_package_id
-    tests:
-    - accepted_values:
-        values:
-        - APEX-0001
-    - unique
   - name: payload_application_id
     tests:
+    - unique
+  - name: payload_applicant_id
+    tests:
+    - unique
+  - name: payload_requested_amount_usd
+  - name: payload_loan_purpose
+    tests:
     - accepted_values:
         values:
-        - APEX-0001
+        - acquisition
+        - expansion
+        - real_estate
+        - refinancing
+        - working_capital
+  - name: payload_loan_term_months
+    tests:
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
+  - name: payload_submission_channel
+    tests:
+    - accepted_values:
+        values:
+        - agent
+        - branch
+        - mobile
+        - web
+  - name: payload_contact_email
+  - name: payload_contact_name
+  - name: payload_submitted_at
+  - name: payload_application_reference
+  - name: payload_deadline
+  - name: payload_requested_by
+  - name: payload_package_id
+    tests:
     - unique
   - name: payload_created_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:02.378774'
   - name: payload_document_id
     tests:
-    - accepted_values:
-        values:
-        - doc-application_proposal-APEX-000
-        - doc-balance_sheet-APEX-000
-        - doc-income_statement-APEX-000
     - unique
   - name: payload_document_type
     tests:
@@ -79,56 +72,27 @@ models:
     - accepted_values:
         values:
         - pdf
+        - xlsx
   - name: payload_filename
-    tests:
-    - accepted_values:
-        values:
-        - application_proposal.pdf
-        - balance_sheet_2024.pdf
-        - income_statement_2024.pdf
   - name: payload_file_path
-    tests:
-    - accepted_values:
-        values:
-        - /Users/natnaelalemseged/code-projects/education/10 academy/Axiom Ledger/documents/COMP-019/application_proposal.pdf
-        - /Users/natnaelalemseged/code-projects/education/10 academy/Axiom Ledger/documents/COMP-019/balance_sheet_2024.pdf
-        - /Users/natnaelalemseged/code-projects/education/10 academy/Axiom Ledger/documents/COMP-019/income_statement_2024.pdf
   - name: payload_file_size_bytes
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
         min_value: 0
   - name: payload_file_hash
-    tests:
-    - accepted_values:
-        values:
-        - doc-application_proposal-APEX-000
-        - doc-balance_sheet-APEX-000
-        - doc-income_statement-APEX-000
   - name: payload_fiscal_year
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
         min_value: 0
   - name: payload_uploaded_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:02.379074'
-        - '2026-04-01T16:09:02.379095'
-        - '2026-04-01T16:09:02.379113'
   - name: payload_uploaded_by
     tests:
     - accepted_values:
         values:
-        - run_pipeline
+        - applicant
+  - name: payload_added_at
   - name: payload_session_id
     tests:
-    - accepted_values:
-        values:
-        - sess-com-f012f31e
-        - sess-cre-1284d40d
-        - sess-dec-1f57ec3a
-        - sess-doc-a99d8859
-        - sess-fra-c5267180
     - unique
   - name: payload_agent_type
     tests:
@@ -143,22 +107,22 @@ models:
     tests:
     - accepted_values:
         values:
-        - agent-compliance-cli
-        - agent-credit-cli
-        - agent-docproc-cli
-        - agent-fraud-cli
-        - agent-orch-cli
+        - compliance-agent-1
+        - credit-agent-1
+        - doc-agent-1
+        - fraud-agent-1
+        - orchestrator-1
     - unique
   - name: payload_model_version
     tests:
     - accepted_values:
         values:
-        - local-stub
+        - claude-sonnet-4-20250514
   - name: payload_langgraph_graph_version
     tests:
     - accepted_values:
         values:
-        - 1.0.0
+        - 1.0.0-sim
   - name: payload_context_source
     tests:
     - accepted_values:
@@ -168,47 +132,22 @@ models:
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
         min_value: 0
-        max_value: 2000
+        max_value: 7020
   - name: payload_started_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:02.387887'
-        - '2026-04-01T16:09:02.591437'
-        - '2026-04-01T16:09:18.378580'
-        - '2026-04-01T16:09:20.647953'
-        - '2026-04-01T16:09:20.660771'
-  - name: metadata_causation_id
-    tests:
-    - accepted_values:
-        values:
-        - sess-com-f012f31e
-        - sess-cre-1284d40d
-        - sess-dec-1f57ec3a
-        - sess-doc-a99d8859
-        - sess-fra-c5267180
-    - unique
   - name: payload_validation_duration_ms
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
         min_value: 0
   - name: payload_validated_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:02.388989'
-        - '2026-04-01T16:09:02.589005'
-        - '2026-04-01T16:09:02.589725'
-        - '2026-04-01T16:09:02.590363'
-        - '2026-04-01T16:09:20.648957'
   - name: payload_node_name
-    description: The name of the node or process that was involved in the event, such
-      as validating inputs, validating document formats, or extracting an income statement.
   - name: payload_node_sequence
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
         min_value: 0
-        max_value: 18
+        max_value: 14
+    - dbt_utils.expression_is_true:
+        expression: payload_node_sequence >= 0
+        name: payload_node_sequence_non_negative
   - name: payload_llm_called
     tests:
     - accepted_values:
@@ -236,7 +175,7 @@ models:
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
         min_value: 0
-        max_value: 2
+        max_value: 10
   - name: payload_detected_format
     tests:
     - accepted_values:
@@ -246,12 +185,33 @@ models:
     tests:
     - accepted_values:
         values:
-        - week3-refinery
+        - week3-v1.0
   - name: payload_extraction_model
     tests:
     - accepted_values:
         values:
-        - refinery.run_extraction
+        - mineru-1.0
+  - name: payload_tool_name
+    tests:
+    - accepted_values:
+        values:
+        - query_applicant_registry
+        - week3_extraction_pipeline
+  - name: payload_tool_input_summary
+  - name: payload_tool_output_summary
+    tests:
+    - accepted_values:
+        values:
+        - Extracted 11 financial line items
+        - Extracted 12 financial line items
+        - Extracted 14 financial line items
+        - Extracted 8 financial line items
+        - Extracted 9 financial line items
+  - name: payload_tool_duration_ms
+    tests:
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
+  - name: payload_called_at
   - name: payload_raw_text_length
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
@@ -265,52 +225,6 @@ models:
     - dbt_expectations.expect_column_values_to_be_between:
         min_value: 0
   - name: payload_completed_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:18.373040'
-        - '2026-04-01T16:09:20.626290'
-        - '2026-04-01T16:09:20.631134'
-        - '2026-04-01T16:09:20.652182'
-        - '2026-04-01T16:09:20.654544'
-  - name: payload_tool_name
-    tests:
-    - accepted_values:
-        values:
-        - load_event_store_stream
-        - query_applicant_registry
-        - week3_extraction_pipeline
-  - name: payload_tool_input_summary
-    tests:
-    - accepted_values:
-        values:
-        - company_id=COMP-019 table=financial_history years=3
-        - company_id=COMP-019 tables=[companies,financial_history,compliance_flags,loan_relationships]
-        - path=/Users/natnaelalemseged/code-projects/education/10 academy/Axiom Ledger/documents/COMP-019/balance_sheet_2024.pdf,type=balance_sheet
-        - path=/Users/natnaelalemseged/code-projects/education/10 academy/Axiom Ledger/documents/COMP-019/income_statement_2024.pdf,type=income_statement
-        - stream_id=docpkg-APEX-0001 filter=ExtractionCompleted
-  - name: payload_tool_output_summary
-    tests:
-    - accepted_values:
-        values:
-        - Loaded 0 fiscal years
-        - Loaded 2 extraction events
-        - Loaded 2 extraction results, 0 flags
-        - Loaded profile, 0 fiscal years, 0 flags, 0 loans
-        - status=completed strategy=layout
-  - name: payload_tool_duration_ms
-    tests:
-    - dbt_expectations.expect_column_values_to_be_between:
-        min_value: 0
-  - name: payload_called_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:18.373833'
-        - '2026-04-01T16:09:20.627010'
-        - '2026-04-01T16:09:20.649999'
-        - '2026-04-01T16:09:20.650579'
-        - '2026-04-01T16:09:20.662031'
   - name: payload_overall_confidence
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
@@ -327,15 +241,7 @@ models:
         values:
         - 'False'
   - name: payload_auditor_notes
-    tests:
-    - accepted_values:
-        values:
-        - Stub quality assessment (--llm stub or auto with no API keys).
   - name: payload_assessed_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:20.630033'
   - name: payload_documents_processed
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
@@ -351,46 +257,8 @@ models:
         min_value: 0
         max_value: 100
   - name: payload_ready_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:20.630520'
-  - name: payload_requested_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:20.630569'
-        - '2026-04-01T16:09:20.652225'
-        - '2026-04-01T16:09:20.663526'
-        - '2026-04-01T16:09:20.677035'
-  - name: payload_requested_by
-    tests:
-    - accepted_values:
-        values:
-        - DocumentProcessingAgent
-  - name: payload_priority
-    tests:
-    - accepted_values:
-        values:
-        - NORMAL
   - name: payload_output_summary
-    tests:
-    - accepted_values:
-        values:
-        - 'Credit: MEDIUM risk, $400,000 limit, 72% confidence. Fraud screening triggered.'
-        - Decision=APPROVE confidence=78% amount=$400,000
-        - Fraud score=0.00 recommendation=PROCEED; compliance check requested.
-        - Processed 2 required financial docs; quality_flags=0; credit analysis requested.
-        - 'Stub compliance summary: regulatory checks completed per policy.'
   - name: payload_written_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:20.630615'
-        - '2026-04-01T16:09:20.652256'
-        - '2026-04-01T16:09:20.663562'
-        - '2026-04-01T16:09:20.677076'
-        - '2026-04-01T16:09:20.687645'
   - name: payload_total_nodes_executed
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
@@ -419,61 +287,18 @@ models:
         - credit_analysis
         - decision_orchestrator
         - fraud_detection
-  - name: payload_applicant_id
+  - name: payload_requested_at
+  - name: payload_priority
     tests:
     - accepted_values:
         values:
-        - COMP-019
-    - unique
-  - name: payload_requested_amount_usd
-    tests:
-    - accepted_values:
-        values:
-        - '500000'
-  - name: payload_loan_purpose
-    tests:
-    - accepted_values:
-        values:
-        - working_capital
-  - name: payload_loan_term_months
-    tests:
-    - dbt_expectations.expect_column_values_to_be_between:
-        min_value: 0
-  - name: payload_submission_channel
-    tests:
-    - accepted_values:
-        values:
-        - WEB
-  - name: payload_contact_email
-    tests:
-    - accepted_values:
-        values:
-        - applicant@example.com
-  - name: payload_contact_name
-    tests:
-    - accepted_values:
-        values:
-        - Applicant
-  - name: payload_submitted_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:20.631278'
-  - name: payload_application_reference
-    tests:
-    - accepted_values:
-        values:
-        - REF-APEX-0001
+        - NORMAL
   - name: payload_opened_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:20.649513'
   - name: payload_has_prior_loans
     tests:
     - accepted_values:
         values:
-        - 'False'
+        - 'True'
   - name: payload_has_defaults
     tests:
     - accepted_values:
@@ -483,23 +308,14 @@ models:
     tests:
     - accepted_values:
         values:
+        - DECLINING
+        - GROWTH
+        - RECOVERING
         - STABLE
+        - VOLATILE
   - name: payload_data_hash
-    tests:
-    - accepted_values:
-        values:
-        - 8eb9960548f4d9c6
   - name: payload_consumed_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:20.650049'
-        - '2026-04-01T16:09:20.650612'
   - name: payload_facts_summary
-    tests:
-    - accepted_values:
-        values:
-        - revenue=5438120, net_income=791333
   - name: payload_quality_flags_present
     tests:
     - accepted_values:
@@ -507,39 +323,21 @@ models:
         - 'False'
   - name: payload_model_deployment_id
     tests:
-    - accepted_values:
-        values:
-        - dep-f23e12df
     - unique
   - name: payload_input_data_hash
-    tests:
-    - accepted_values:
-        values:
-        - 17fbc12a596da87d
-        - de65d739b3fc18a8
   - name: payload_analysis_duration_ms
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
         min_value: 0
   - name: payload_triggered_by_event_id
     tests:
-    - accepted_values:
-        values:
-        - sess-com-f012f31e
-        - sess-cre-1284d40d
-        - sess-fra-c5267180
     - unique
   - name: payload_screening_model_version
     tests:
     - accepted_values:
         values:
-        - local-stub
+        - claude-sonnet-4-20250514
   - name: payload_initiated_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:20.661437'
-        - '2026-04-01T16:09:20.671013'
   - name: payload_fraud_score
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
@@ -549,6 +347,7 @@ models:
     - accepted_values:
         values:
         - LOW
+        - MEDIUM
   - name: payload_anomalies_found
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
@@ -558,12 +357,14 @@ models:
     - accepted_values:
         values:
         - APPROVE
+        - DECLINE
         - PROCEED
+        - REFER
   - name: payload_regulation_set_version
     tests:
     - accepted_values:
         values:
-        - 2026-Q1-v1
+        - 2026-Q1
   - name: payload_rule_id
     tests:
     - accepted_values:
@@ -578,43 +379,27 @@ models:
     tests:
     - accepted_values:
         values:
-        - Bank Secrecy Act (BSA) Check
-        - Jurisdiction Lending Eligibility
-        - Legal Entity Type Eligibility
-        - Minimum Operating History
-        - OFAC Sanctions Screening
+        - Bank Secrecy Act (BSA)
+        - Jurisdiction Eligibility
+        - Legal Entity Eligibility
+        - OFAC Sanctions
+        - Operating History
   - name: payload_rule_version
     tests:
     - accepted_values:
         values:
         - 2026-Q1-v1
   - name: payload_evidence_hash
-    tests:
-    - accepted_values:
-        values:
-        - 06bba41671fd1cef
-        - 6dac498875645ca3
-        - 74fc99e6c31a0605
-        - a75c62146a6a7af3
-        - f7e522c6e6fbad11
   - name: payload_evaluation_notes
     tests:
     - accepted_values:
         values:
-        - REG-001 passed deterministic policy checks.
-        - REG-002 passed deterministic policy checks.
-        - REG-003 passed deterministic policy checks.
-        - REG-004 passed deterministic policy checks.
-        - REG-005 passed deterministic policy checks.
+        - 'Bank Secrecy Act (BSA): Clear.'
+        - 'Jurisdiction Eligibility: Clear.'
+        - 'Legal Entity Eligibility: Clear.'
+        - 'OFAC Sanctions: Clear.'
+        - 'Operating History: Clear.'
   - name: payload_evaluated_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:20.672102'
-        - '2026-04-01T16:09:20.673035'
-        - '2026-04-01T16:09:20.673829'
-        - '2026-04-01T16:09:20.674672'
-        - '2026-04-01T16:09:20.675449'
   - name: payload_note_type
     tests:
     - accepted_values:
@@ -624,7 +409,7 @@ models:
     tests:
     - accepted_values:
         values:
-        - Jurisdiction qualifies for Community Reinvestment Act consideration.
+        - Applicant jurisdiction qualifies for CRA consideration.
   - name: payload_rules_evaluated
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
@@ -646,11 +431,14 @@ models:
     - accepted_values:
         values:
         - 'False'
+        - 'True'
   - name: payload_overall_verdict
     tests:
     - accepted_values:
         values:
+        - BLOCKED
         - CLEAR
+        - CONDITIONAL
   - name: payload_all_analyses_complete
     tests:
     - accepted_values:
@@ -658,9 +446,6 @@ models:
         - 'True'
   - name: payload_orchestrator_session_id
     tests:
-    - accepted_values:
-        values:
-        - sess-dec-1f57ec3a
     - unique
   - name: payload_confidence
     tests:
@@ -671,18 +456,12 @@ models:
     tests:
     - accepted_values:
         values:
-        - '400000.0'
+        - '1286000.0'
+        - '202000.0'
+        - '2410000.0'
+        - '913000.0'
   - name: payload_executive_summary
-    tests:
-    - accepted_values:
-        values:
-        - 'Stub orchestrator: credit, fraud, and compliance inputs support a routine
-          approval subject to standard conditions.'
   - name: payload_generated_at
-    tests:
-    - accepted_values:
-        values:
-        - '2026-04-01T16:09:20.687549'
   - name: payload_interest_rate_pct
     tests:
     - dbt_expectations.expect_column_values_to_be_between:
@@ -695,14 +474,42 @@ models:
     tests:
     - accepted_values:
         values:
-        - DecisionOrchestratorAgent
+        - auto
   - name: payload_effective_date
     tests:
     - accepted_values:
         values:
-        - '2026-04-01'
+        - '2026-03-23'
   - name: payload_approved_at
+  - name: payload_failure_reason
     tests:
     - accepted_values:
         values:
-        - '2026-04-01T16:09:20.687611'
+        - Bank Secrecy Act (BSA) check failed.
+        - Jurisdiction Eligibility check failed.
+        - OFAC Sanctions check failed.
+  - name: payload_is_hard_block
+    tests:
+    - accepted_values:
+        values:
+        - 'False'
+        - 'True'
+  - name: payload_remediation_available
+    tests:
+    - accepted_values:
+        values:
+        - 'False'
+        - 'True'
+  - name: payload_remediation_description
+  - name: payload_declined_by
+    tests:
+    - accepted_values:
+        values:
+        - auto
+        - compliance-system
+  - name: payload_adverse_action_notice_required
+    tests:
+    - accepted_values:
+        values:
+        - 'True'
+  - name: payload_declined_at

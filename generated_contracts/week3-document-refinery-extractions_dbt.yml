@@ -10,11 +10,9 @@ models:
   - name: source_path
     tests:
     - not_null
-    description: The file path where the source document is stored.
   - name: source_hash
     tests:
     - not_null
-    description: The SHA-256 hash of the source document contents.
   - name: extraction_model
     tests:
     - not_null
@@ -36,7 +34,6 @@ models:
   - name: extracted_facts_text
     tests:
     - not_null
-    description: The extracted facts from the source document, represented as a string.
   - name: extracted_facts_confidence
     tests:
     - not_null
@@ -52,5 +49,3 @@ models:
   - name: extracted_facts_source_excerpt
     tests:
     - not_null
-    description: The excerpt from the source document that the extracted facts were
-      derived from.

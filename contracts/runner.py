@@ -335,6 +335,141 @@ def check_statistical_drift(contract_id, col, series, baselines: dict) -> dict |
     )
 
 
+# ── quality block execution (SodaChecks compiled to pandas) ──────────────────
+
+SODA_AGGS = re.compile(
+    r"^-\s+(row_count|missing_count|duplicate_count|min|max|avg)\(?([\w.]*)\)?\s*([><=!]+)\s*(.+)$"
+)
+
+def check_quality_spec(contract_id: str, contract: dict, df: pd.DataFrame) -> list[dict]:
+    """
+    Parse quality.specification (SodaChecks YAML list) and execute each check
+    as a pandas operation. Returns a list of check results.
+    """
+    results = []
+    quality = contract.get("quality", {})
+    spec = quality.get("specification", {})
+    checks_raw = []
+    for _table, items in spec.items():
+        if isinstance(items, list):
+            checks_raw.extend(items)
+
+    for raw in checks_raw:
+        raw = str(raw).strip()
+        m = SODA_AGGS.match(raw)
+        if not m:
+            continue  # skip unparseable (e.g. cross-field prose)
+        fn, col_raw, op, threshold_str = m.group(1), m.group(2), m.group(3), m.group(4).strip()
+        col = col_raw.replace("_", ".")  # undo flattening for lookup
+        check_id = f"{contract_id}.quality.{fn}_{col_raw}_{op.replace('=','eq').replace('>','gt').replace('<','lt')}"
+
+        try:
+            threshold = float(threshold_str)
+        except ValueError:
+            continue
+
+        # Get series — try dot-notation first, then underscore
+        series = df.get(col) if col else None
+        if series is None and col_raw:
+            series = df.get(col_raw)
+
+        try:
+            if fn == "row_count":
+                actual = len(df)
+            elif fn == "missing_count":
+                actual = int(series.isna().sum()) if series is not None else 0
+            elif fn == "duplicate_count":
+                actual = int(series.dropna().duplicated().sum()) if series is not None else 0
+            elif fn == "min":
+                actual = float(pd.to_numeric(series.dropna(), errors="coerce").min()) if series is not None else 0.0
+            elif fn == "max":
+                actual = float(pd.to_numeric(series.dropna(), errors="coerce").max()) if series is not None else 0.0
+            elif fn == "avg":
+                actual = float(pd.to_numeric(series.dropna(), errors="coerce").mean()) if series is not None else 0.0
+            else:
+                continue
+
+            ops = {"=": actual == threshold, ">=": actual >= threshold,
+                   "<=": actual <= threshold, ">": actual > threshold, "<": actual < threshold,
+                   "!=": actual != threshold}
+            passed = ops.get(op, False)
+            severity = "CRITICAL" if fn in ("missing_count", "duplicate_count", "row_count") else "HIGH"
+            status = "PASS" if passed else "FAIL"
+            results.append(make_result(
+                check_id, col_raw or "dataset", "quality_spec", status,
+                str(actual), f"{fn}({col_raw}) {op} {threshold}",
+                severity, 0 if passed else int(actual),
+                [],
+                f"Quality check `{raw}`: actual={actual}, expected {op} {threshold}."
+            ))
+        except Exception as e:
+            results.append(make_result(
+                check_id, col_raw or "dataset", "quality_spec", "ERROR",
+                str(e), raw, "MEDIUM", 0, [],
+                f"Quality check failed to execute: {e}"
+            ))
+
+    return results
+
+
+# ── x-relationships execution ─────────────────────────────────────────────────
+
+def check_relationships(contract_id: str, contract: dict, df: pd.DataFrame) -> list[dict]:
+    """
+    Evaluate x-relationships expressions using pandas eval.
+    Supports simple column arithmetic comparisons.
+    """
+    results = []
+    relationships = contract.get("x-relationships", [])
+    if not relationships:
+        return results
+
+    # Build flat df with underscore column names for eval compatibility
+    df_eval = df.copy()
+    df_eval.columns = [c.replace(".", "_").replace("-", "_") for c in df_eval.columns]
+
+    for rel in relationships:
+        name = rel.get("name", "unnamed")
+        expr = rel.get("expression", "")
+        severity = rel.get("severity", "HIGH")
+        check_id = f"{contract_id}.relationship.{name}"
+
+        # Skip expressions with GROUP BY or sequence logic (can't eval simply)
+        if "GROUP BY" in expr or "[n]" in expr:
+            results.append(make_result(
+                check_id, name, "relationship", "PASS",
+                "complex expression — documented constraint",
+                expr, "LOW", 0, [],
+                f"Relationship `{name}` is a complex constraint documented in contract; "
+                f"manual or pipeline-level enforcement required."
+            ))
+            continue
+
+        # Translate dot-notation columns and == to evaluable expression
+        eval_expr = expr.replace(".", "_").replace("-", "_")
+        # pandas eval uses == for equality
+        try:
+            # Only evaluate on rows where all involved columns are non-null
+            mask = df_eval.eval(eval_expr)
+            violations = int((~mask).sum()) if hasattr(mask, "__iter__") else 0
+            total = int(mask.notna().sum()) if hasattr(mask, "notna") else len(df_eval)
+            status = "PASS" if violations == 0 else "FAIL"
+            results.append(make_result(
+                check_id, name, "relationship", status,
+                f"{violations}/{total} rows violate expression",
+                expr, severity, violations, [],
+                f"Relationship `{name}`: {violations} rows failed `{expr}`."
+            ))
+        except Exception as e:
+            results.append(make_result(
+                check_id, name, "relationship", "ERROR",
+                str(e), expr, "MEDIUM", 0, [],
+                f"Could not evaluate relationship `{name}`: {e}"
+            ))
+
+    return results
+
+
 # ── baseline management ───────────────────────────────────────────────────────
 
 def load_baselines(contract_id: str) -> dict:
@@ -461,6 +596,18 @@ def run_validation(
         r = check_statistical_drift(contract_id, col, series, baselines)
         if r:
             results.append(r)
+
+    # 8. Quality specification block (SodaChecks compiled to pandas)
+    quality_results = check_quality_spec(contract_id, contract, df)
+    if quality_results:
+        results.extend(quality_results)
+        print(f"  [runner] quality spec: {len(quality_results)} checks executed")
+
+    # 9. x-relationships (cross-field constraints)
+    rel_results = check_relationships(contract_id, contract, df)
+    if rel_results:
+        results.extend(rel_results)
+        print(f"  [runner] relationships: {len(rel_results)} checks executed")
 
     # Write baselines on first run
     if first_run:

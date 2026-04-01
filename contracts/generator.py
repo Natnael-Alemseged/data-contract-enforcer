@@ -143,6 +143,35 @@ def profile_all(df: pd.DataFrame) -> dict[str, dict]:
 
 UUID_RE = r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
 ISO_RE  = r"^\d{4}-\d{2}-\d{2}T"
+PATH_RE = re.compile(r"^(/|[A-Za-z]:\\|\.\.?/)")
+TS_RE   = re.compile(r"^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}")
+
+
+def is_stable_enum(values: list[str]) -> bool:
+    """
+    Return True only if every value looks like a stable domain constant,
+    not a run-specific timestamp, absolute path, or one-off literal.
+    Stable: short controlled-vocabulary strings (model names, event types, statuses).
+    Brittle: ISO timestamps, absolute file paths, session IDs, hash strings.
+    """
+    for v in values:
+        sv = str(v).strip()
+        # absolute or relative file paths
+        if PATH_RE.match(sv):
+            return False
+        # ISO timestamps
+        if TS_RE.match(sv):
+            return False
+        # looks like a hex hash (>= 12 hex chars with no spaces)
+        if re.match(r"^[0-9a-f]{12,}$", sv, re.I) and " " not in sv:
+            return False
+        # session-style IDs with embedded hashes
+        if re.match(r"^[a-z]+-[a-z]+-[0-9a-f]{6,}$", sv):
+            return False
+        # very long strings (>80 chars) are usually prose, not enum labels
+        if len(sv) > 80:
+            return False
+    return True
 
 
 def infer_type(dtype_str: str) -> str:
@@ -171,9 +200,15 @@ def column_to_clause(profile: dict) -> dict:
         if profile.get("warning"):
             clause["x-warning"] = profile["warning"]
 
-    # UUID fields
+    # UUID fields — only set uuid format/pattern if observed values actually match UUID v4
     is_id = name.endswith("_id") or name.endswith(".id")
-    if is_id:
+    _uuid_compiled = re.compile(UUID_RE, re.I)
+    _samples = profile.get("sample_values", [])
+    _values_are_uuids = (
+        bool(_samples)
+        and all(_uuid_compiled.match(str(v)) for v in _samples if v is not None)
+    )
+    if is_id and _values_are_uuids:
         clause["format"] = "uuid"
         clause["pattern"] = UUID_RE
 
@@ -187,12 +222,14 @@ def column_to_clause(profile: dict) -> dict:
 
     # enum detection: low cardinality string columns where sample covers all values
     # Skip if field looks like a UUID/ID or timestamp — those aren't enums
+    # Also skip brittle run-specific values (paths, timestamps, session hashes)
     is_id_or_ts = (is_id or name.endswith("_at") or name.endswith("_time"))
     if (clause["type"] == "string"
             and not is_id_or_ts
             and profile["cardinality_estimate"] <= 10
             and profile["cardinality_estimate"] > 0
-            and profile["cardinality_estimate"] == len(profile["sample_values"])):
+            and profile["cardinality_estimate"] == len(profile["sample_values"])
+            and is_stable_enum(profile["sample_values"])):
         clause["enum"] = sorted(profile["sample_values"])
 
     # numeric range from observed data (non-confidence)
@@ -372,8 +409,10 @@ def build_contract(
         if "confidence" in col and p.get("stats"):
             soda_checks.append(f"- min({flat}) >= 0.0")
             soda_checks.append(f"- max({flat}) <= 1.0")
-        # Uniqueness check for ID fields
-        if (col.endswith("_id") or col.endswith(".id")) and p["null_fraction"] == 0.0:
+        # Uniqueness check for ID fields — only for nested (dot-notation) IDs
+        # Parent-level IDs repeat in exploded arrays, so skip them
+        if ("." in col and (col.endswith("_id") or col.endswith(".id"))
+                and p["null_fraction"] == 0.0):
             soda_checks.append(f"- duplicate_count({flat}) = 0")
         # Non-negative check for duration/count/position fields
         if (p["dtype"] in ("int64", "float64") and p.get("stats", {}).get("min", -1) >= 0
@@ -459,13 +498,23 @@ def build_dbt_schema(contract_id: str, profiles: dict[str, dict]) -> dict:
             })
             has_range = True
 
-        # Enum: only for string fields (not numeric — avoid overfitting)
+        # Enum: only for string fields with stable, domain-level values
         if (not is_numeric
                 and p.get("cardinality_estimate", 999) <= 10
-                and p["sample_values"]):
+                and p["sample_values"]
+                and is_stable_enum(p["sample_values"])):
             tests.append({
                 "accepted_values": {
                     "values": sorted(p["sample_values"])
+                }
+            })
+
+        # Monotonic increasing — for position/sequence integer fields
+        if is_numeric and any(kw in col for kw in ("position", "sequence", "_sequence")):
+            tests.append({
+                "dbt_utils.expression_is_true": {
+                    "expression": f"{col.replace('.', '_')} >= 0",
+                    "name": f"{col.replace('.', '_')}_non_negative",
                 }
             })
 
