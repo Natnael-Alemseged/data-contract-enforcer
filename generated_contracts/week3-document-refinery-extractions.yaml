@@ -38,6 +38,7 @@ schema:
       max: 3532.0
       mean: 1830.2941
       stddev: 619.3054
+    minimum: 0
   extracted_at:
     type: string
     required: true
@@ -65,6 +66,7 @@ schema:
       max: 15.0
       mean: 7.4314
       stddev: 4.1685
+    minimum: 0
   extracted_facts.source_excerpt:
     type: string
     required: true
@@ -74,21 +76,25 @@ quality:
     checks for week3_document_refinery_extractions:
     - '- row_count >= 1'
     - '- missing_count(doc_id) = 0'
+    - '- duplicate_count(doc_id) = 0'
     - '- missing_count(source_path) = 0'
     - '- missing_count(source_hash) = 0'
     - '- missing_count(extraction_model) = 0'
     - '- missing_count(processing_time_ms) = 0'
+    - '- min(processing_time_ms) >= 0'
     - '- missing_count(extracted_at) = 0'
     - '- missing_count(extracted_facts_fact_id) = 0'
+    - '- duplicate_count(extracted_facts_fact_id) = 0'
     - '- missing_count(extracted_facts_text) = 0'
     - '- missing_count(extracted_facts_confidence) = 0'
     - '- min(extracted_facts_confidence) >= 0.0'
     - '- max(extracted_facts_confidence) <= 1.0'
     - '- missing_count(extracted_facts_page_ref) = 0'
+    - '- min(extracted_facts_page_ref) >= 0'
     - '- missing_count(extracted_facts_source_excerpt) = 0'
 lineage:
   upstream: []
   downstream: []
-x-generated-at: '2026-04-01T15:21:25.830739Z'
+x-generated-at: '2026-04-01T19:42:13.575234Z'
 x-source-hash: 36a082eafe5b811e2383b2e22cbbb31db61330c17ba68be169419479aef0dd11
-x-snapshot-id: f637206c-c9a7-4a4d-843a-0649faa48545
+x-snapshot-id: c1ee2503-58ba-4f26-a065-e7292a51cd83

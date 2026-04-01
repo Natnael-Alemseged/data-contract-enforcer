@@ -10,11 +10,11 @@ models:
   - name: source_path
     tests:
     - not_null
-    description: The file path of the source document from which the data was extracted.
+    description: The file path where the source document is stored.
   - name: source_hash
     tests:
     - not_null
-    description: A unique hash value that identifies the source document.
+    description: The SHA-256 hash of the source document contents.
   - name: extraction_model
     tests:
     - not_null
@@ -24,6 +24,8 @@ models:
   - name: processing_time_ms
     tests:
     - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: extracted_at
     tests:
     - not_null
@@ -34,15 +36,21 @@ models:
   - name: extracted_facts_text
     tests:
     - not_null
-    description: The extracted key-value pairs of financial data from the source document.
+    description: The extracted facts from the source document, represented as a string.
   - name: extracted_facts_confidence
     tests:
     - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0.0
+        max_value: 1.0
   - name: extracted_facts_page_ref
     tests:
     - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
+        max_value: 30
   - name: extracted_facts_source_excerpt
     tests:
     - not_null
-    description: The excerpt from the source document that corresponds to the extracted
-      key-value pairs.
+    description: The excerpt from the source document that the extracted facts were
+      derived from.
