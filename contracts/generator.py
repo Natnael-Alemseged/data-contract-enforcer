@@ -172,9 +172,14 @@ def column_to_clause(profile: dict) -> dict:
             clause["x-warning"] = profile["warning"]
 
     # UUID fields
-    if name.endswith("_id") or name.endswith(".id"):
+    is_id = name.endswith("_id") or name.endswith(".id")
+    if is_id:
         clause["format"] = "uuid"
         clause["pattern"] = UUID_RE
+
+    # Uniqueness for identifier fields
+    if is_id and profile["cardinality_estimate"] == len(profile["sample_values"]):
+        clause["x-unique"] = True
 
     # timestamp fields
     if name.endswith("_at") or name.endswith("_time"):
@@ -182,8 +187,7 @@ def column_to_clause(profile: dict) -> dict:
 
     # enum detection: low cardinality string columns where sample covers all values
     # Skip if field looks like a UUID/ID or timestamp — those aren't enums
-    is_id_or_ts = (name.endswith("_id") or name.endswith(".id")
-                   or name.endswith("_at") or name.endswith("_time"))
+    is_id_or_ts = (is_id or name.endswith("_at") or name.endswith("_time"))
     if (clause["type"] == "string"
             and not is_id_or_ts
             and profile["cardinality_estimate"] <= 10
@@ -198,6 +202,22 @@ def column_to_clause(profile: dict) -> dict:
             "min": s["min"], "max": s["max"],
             "mean": round(s["mean"], 4), "stddev": round(s["stddev"], 4),
         }
+        # Promote non-negative floor to hard constraint for clearly non-negative fields
+        if s["min"] >= 0 and clause["type"] in ("number", "integer"):
+            clause["minimum"] = 0
+        # Promote positive-only constraint for duration/count/size fields
+        if any(kw in name for kw in ("_ms", "_count", "_size", "_bytes", "_length")):
+            clause["minimum"] = 0
+
+    # Sequence / monotonic fields (event sourcing: position, sequence, version)
+    if clause["type"] == "integer" and any(kw in name for kw in ("position", "sequence")):
+        clause["minimum"] = 0
+        clause["x-monotonic"] = "increasing"
+        clause["description"] = (
+            f"Monotonically increasing per stream. "
+            f"Observed range: [{profile.get('stats', {}).get('min', '?')}, "
+            f"{profile.get('stats', {}).get('max', '?')}]."
+        )
 
     # null_fraction stat
     if profile["null_fraction"] > 0:
@@ -346,11 +366,19 @@ def build_contract(
     # Soda quality checks for key fields
     soda_checks = ["- row_count >= 1"]
     for col, p in profiles.items():
+        flat = col.replace(".", "_")
         if p["null_fraction"] == 0.0:
-            soda_checks.append(f"- missing_count({col.replace('.', '_')}) = 0")
+            soda_checks.append(f"- missing_count({flat}) = 0")
         if "confidence" in col and p.get("stats"):
-            soda_checks.append(f"- min({col.replace('.', '_')}) >= 0.0")
-            soda_checks.append(f"- max({col.replace('.', '_')}) <= 1.0")
+            soda_checks.append(f"- min({flat}) >= 0.0")
+            soda_checks.append(f"- max({flat}) <= 1.0")
+        # Uniqueness check for ID fields
+        if (col.endswith("_id") or col.endswith(".id")) and p["null_fraction"] == 0.0:
+            soda_checks.append(f"- duplicate_count({flat}) = 0")
+        # Non-negative check for duration/count/position fields
+        if (p["dtype"] in ("int64", "float64") and p.get("stats", {}).get("min", -1) >= 0
+                and any(kw in col for kw in ("_ms", "_count", "position", "page_ref"))):
+            soda_checks.append(f"- min({flat}) >= 0")
 
     source_hash = sha256_bytes(source_path.read_bytes())
     table_name = contract_id.replace("-", "_")
@@ -403,16 +431,48 @@ def build_dbt_schema(contract_id: str, profiles: dict[str, dict]) -> dict:
     for col, p in profiles.items():
         col_def: dict = {"name": col.replace(".", "_")}
         tests = []
+        is_numeric = p["dtype"] in ("float64", "float32", "int64", "int32")
+        has_range = False
+
         if p["null_fraction"] == 0.0:
             tests.append("not_null")
-        if p.get("cardinality_estimate", 999) <= 10 and p["sample_values"]:
+
+        # Confidence fields — range test instead of accepted_values
+        if "confidence" in col and is_numeric:
+            tests.append({
+                "dbt_expectations.expect_column_values_to_be_between": {
+                    "min_value": 0.0,
+                    "max_value": 1.0,
+                }
+            })
+            has_range = True
+
+        # Non-negative numeric fields — range test
+        elif is_numeric and p.get("stats", {}).get("min", -1) >= 0:
+            stats = p["stats"]
+            range_test = {"min_value": 0}
+            # Add observed max as soft upper bound for bounded fields
+            if any(kw in col for kw in ("_version", "_count", "page_ref", "_sequence")):
+                range_test["max_value"] = int(stats["max"] * 2) or 100
+            tests.append({
+                "dbt_expectations.expect_column_values_to_be_between": range_test,
+            })
+            has_range = True
+
+        # Enum: only for string fields (not numeric — avoid overfitting)
+        if (not is_numeric
+                and p.get("cardinality_estimate", 999) <= 10
+                and p["sample_values"]):
             tests.append({
                 "accepted_values": {
                     "values": sorted(p["sample_values"])
                 }
             })
+
+        # Uniqueness for ID fields
         if col.endswith("_id") or col.endswith(".id"):
             tests.append("unique")
+
         if tests:
             col_def["tests"] = tests
         if p.get("llm_annotation", {}).get("description"):
