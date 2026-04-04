@@ -397,6 +397,7 @@ def build_contract(
     profiles: dict[str, dict],
     downstream_consumers: list[dict],
     snapshot_id: str | None,
+    registry_subscribers: list[dict] | None = None,
 ) -> dict:
     schema_clauses = {col: column_to_clause(p) for col, p in profiles.items()}
 
@@ -454,7 +455,10 @@ def build_contract(
         },
         "lineage": {
             "upstream": [],
-            "downstream": downstream_consumers,
+            "downstream_nodes_from_lineage": downstream_consumers,
+            "registry_subscribers": [s["subscriber_id"] for s in (registry_subscribers or [])],
+            "note": "Blast radius uses registry_subscribers as primary source. "
+                    "downstream_nodes_from_lineage is enrichment only.",
         },
         "x-generated-at": now_iso(),
         "x-source-hash": source_hash,
@@ -571,6 +575,24 @@ def write_snapshot(contract_id: str, profiles: dict[str, dict], contract: dict) 
 
 # ── Main pipeline ─────────────────────────────────────────────────────────────
 
+def load_registry_subscribers(registry_path: Path | None, contract_id: str) -> list[dict]:
+    """Load subscribers for this contract from the registry."""
+    if not registry_path or not registry_path.exists():
+        return []
+    with open(registry_path) as f:
+        registry = yaml.safe_load(f)
+    subscribers = []
+    for sub in registry.get("subscriptions", []):
+        if sub["contract_id"] == contract_id:
+            subscribers.append({
+                "subscriber_id": sub["subscriber_id"],
+                "fields_consumed": sub.get("fields_consumed", []),
+                "breaking_fields": [bf["field"] for bf in sub.get("breaking_fields", [])],
+                "validation_mode": sub.get("validation_mode", "AUDIT"),
+            })
+    return subscribers
+
+
 @_traceable(name="contract-generator", run_type="chain")
 def generate(
     source: Path,
@@ -578,6 +600,7 @@ def generate(
     lineage: Path,
     output_dir: Path,
     skip_llm: bool = False,
+    registry: Path | None = None,
 ) -> Path:
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -602,10 +625,15 @@ def generate(
 
     # Stage 3 (done inside build_contract via column_to_clause)
 
-    # Stage 4 — lineage injection
+    # Stage 4 — lineage injection + registry subscribers
     lineage_snapshot = load_lineage(lineage)
     consumers = find_downstream_consumers(lineage_snapshot, contract_id) if lineage_snapshot else []
     print(f"  [4] found {len(consumers)} downstream consumers in lineage graph")
+
+    registry_subs = load_registry_subscribers(registry, contract_id)
+    if registry_subs:
+        print(f"  [4] found {len(registry_subs)} registry subscriber(s): "
+              f"{[s['subscriber_id'] for s in registry_subs]}")
 
     # Stage 5 — LLM annotation
     if not skip_llm:
@@ -616,7 +644,8 @@ def generate(
     snapshot_id = write_snapshot(contract_id, profiles, {})
 
     # Stage 6 — build contract
-    contract = build_contract(contract_id, source, profiles, consumers, snapshot_id)
+    contract = build_contract(contract_id, source, profiles, consumers, snapshot_id,
+                              registry_subscribers=registry_subs)
 
     # Write Bitol YAML
     out_path = output_dir / f"{contract_id}.yaml"
@@ -642,6 +671,7 @@ if __name__ == "__main__":
     parser.add_argument("--contract-id", required=True, help="Contract ID (used as output filename)")
     parser.add_argument("--lineage",     required=True, help="Path to lineage_snapshots.jsonl")
     parser.add_argument("--output",      required=True, help="Output directory for generated contracts")
+    parser.add_argument("--registry",    default=None, help="Path to contract_registry/subscriptions.yaml")
     parser.add_argument("--skip-llm",    action="store_true", help="Skip LLM annotation step")
     args = parser.parse_args()
 
@@ -651,4 +681,5 @@ if __name__ == "__main__":
         lineage=Path(args.lineage),
         output_dir=Path(args.output),
         skip_llm=args.skip_llm,
+        registry=Path(args.registry) if args.registry else None,
     )
