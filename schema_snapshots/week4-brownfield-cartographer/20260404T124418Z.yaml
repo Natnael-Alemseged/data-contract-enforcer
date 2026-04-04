@@ -1,0 +1,39 @@
+snapshot_id: 9f9c67e8-5ba8-43e4-bb1f-1a7fc7bb95e0
+contract_id: week4-brownfield-cartographer
+captured_at: '2026-04-04T12:44:18.959478Z'
+columns:
+  snapshot_id:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 1
+    stats: null
+  codebase_root:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 1
+    stats: null
+  git_commit:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 1
+    stats: null
+  captured_at:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 1
+    stats: null
+  nodes.node_id:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 13
+    stats: null
+  nodes.type:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 2
+    stats: null
+  nodes.label:
+    dtype: str
+    null_fraction: 0.0
+    cardinality: 13
+    stats: null
