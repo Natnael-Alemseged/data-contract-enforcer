@@ -1,0 +1,35 @@
+version: 2
+models:
+- name: week4_brownfield_cartographer
+  description: dbt model for week4-brownfield-cartographer
+  columns:
+  - name: snapshot_id
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - c70d3813-742d-4d98-8efc-2de6a1cb16e7
+    - unique
+  - name: codebase_root
+    tests:
+    - not_null
+  - name: git_commit
+    tests:
+    - not_null
+  - name: captured_at
+    tests:
+    - not_null
+  - name: nodes_node_id
+    tests:
+    - not_null
+    - unique
+  - name: nodes_type
+    tests:
+    - not_null
+    - accepted_values:
+        values:
+        - MODEL
+        - TABLE
+  - name: nodes_label
+    tests:
+    - not_null

@@ -37,6 +37,7 @@ schema:
       max: 70.0
       mean: 20.0769
       stddev: 19.0983
+    minimum: 0
   code_refs.line_end:
     type: integer
     required: true
@@ -45,6 +46,7 @@ schema:
       max: 95.0
       mean: 55.6154
       stddev: 20.6661
+    minimum: 0
   code_refs.symbol:
     type: string
     required: true
@@ -72,7 +74,10 @@ quality:
     - '- max(code_refs_confidence) <= 1.0'
 lineage:
   upstream: []
-  downstream: []
-x-generated-at: '2026-04-01T14:30:56.086521Z'
+  downstream_nodes_from_lineage: []
+  registry_subscribers: []
+  note: Blast radius uses registry_subscribers as primary source. downstream_nodes_from_lineage
+    is enrichment only.
+x-generated-at: '2026-04-04T12:44:23.081310Z'
 x-source-hash: fe04a0bb85c40b31c9aaf9c0474506f4023ddb784cfb77394b2dd73ba04820f4
-x-snapshot-id: ebcd3bc1-d399-40a6-bc3c-cca3451c28b9
+x-snapshot-id: c15549fb-6aa5-44fe-bad3-2da3e01a6305

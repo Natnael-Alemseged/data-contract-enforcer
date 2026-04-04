@@ -13,25 +13,25 @@ models:
   - name: created_at
     tests:
     - not_null
-    - accepted_values:
-        values:
-        - '2025-08-12T00:00:00Z'
-        - '2025-08-13T00:00:00Z'
-        - '2025-08-25T00:00:00Z'
-        - '2025-08-26T00:00:00Z'
-        - '2025-08-29T00:00:00Z'
   - name: code_refs_file
     tests:
     - not_null
   - name: code_refs_line_start
     tests:
     - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: code_refs_line_end
     tests:
     - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: code_refs_symbol
     tests:
     - not_null
   - name: code_refs_confidence
     tests:
     - not_null
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0.0
+        max_value: 1.0

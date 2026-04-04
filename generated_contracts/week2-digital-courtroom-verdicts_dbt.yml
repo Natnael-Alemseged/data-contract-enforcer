@@ -19,9 +19,6 @@ models:
   - name: rubric_id
     tests:
     - not_null
-    - accepted_values:
-        values:
-        - da38f24419835c9423f13a27290a6ec748996016514c80325c157cc7b336c003
     - unique
   - name: rubric_version
     tests:
@@ -38,18 +35,14 @@ models:
   - name: overall_score
     tests:
     - not_null
-    - accepted_values:
-        values:
-        - '4.9'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0
   - name: confidence
     tests:
     - not_null
-    - accepted_values:
-        values:
-        - '0.98'
+    - dbt_expectations.expect_column_values_to_be_between:
+        min_value: 0.0
+        max_value: 1.0
   - name: evaluated_at
     tests:
     - not_null
-    - accepted_values:
-        values:
-        - '2026-04-01T13:28:58.152689Z'

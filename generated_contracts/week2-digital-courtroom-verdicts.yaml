@@ -20,8 +20,7 @@ schema:
     required: true
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - ace14a9e-a35c-4524-a8dd-0324cf331222
+    x-unique: true
   target_ref:
     type: string
     required: true
@@ -30,10 +29,7 @@ schema:
   rubric_id:
     type: string
     required: true
-    format: uuid
-    pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
-    enum:
-    - da38f24419835c9423f13a27290a6ec748996016514c80325c157cc7b336c003
+    x-unique: true
   rubric_version:
     type: string
     required: true
@@ -52,6 +48,7 @@ schema:
       max: 4.9
       mean: 4.9
       stddev: 0.0
+    minimum: 0
   confidence:
     type: number
     required: true
@@ -63,8 +60,6 @@ schema:
     type: string
     required: true
     format: date-time
-    enum:
-    - '2026-04-01T13:28:58.152689Z'
 quality:
   type: SodaChecks
   specification:
@@ -82,7 +77,10 @@ quality:
     - '- missing_count(evaluated_at) = 0'
 lineage:
   upstream: []
-  downstream: []
-x-generated-at: '2026-04-01T14:30:56.266198Z'
+  downstream_nodes_from_lineage: []
+  registry_subscribers: []
+  note: Blast radius uses registry_subscribers as primary source. downstream_nodes_from_lineage
+    is enrichment only.
+x-generated-at: '2026-04-04T12:49:24.020897Z'
 x-source-hash: 8ddbfe009287000782fd8170000836ee77d9132d21173595e136a672e284c0e4
-x-snapshot-id: fc20b112-bd5b-47b1-8ea8-98dc5ac31fb6
+x-snapshot-id: 61306901-8b2f-4c90-a4a4-481776e76349

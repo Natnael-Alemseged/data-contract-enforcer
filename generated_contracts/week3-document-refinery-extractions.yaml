@@ -93,7 +93,12 @@ quality:
     - '- missing_count(extracted_facts_source_excerpt) = 0'
 lineage:
   upstream: []
-  downstream: []
-x-generated-at: '2026-04-01T20:10:48.329115Z'
+  downstream_nodes_from_lineage: []
+  registry_subscribers:
+  - week4-cartographer
+  - week7-enforcer
+  note: Blast radius uses registry_subscribers as primary source. downstream_nodes_from_lineage
+    is enrichment only.
+x-generated-at: '2026-04-04T13:13:38.928390Z'
 x-source-hash: 36a082eafe5b811e2383b2e22cbbb31db61330c17ba68be169419479aef0dd11
-x-snapshot-id: 60686a06-08ff-49b4-8966-ef4a0c086722
+x-snapshot-id: 422c24f8-cc48-4c79-a291-3cc76b89ad1a

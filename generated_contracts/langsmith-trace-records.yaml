@@ -51,6 +51,7 @@ schema:
       max: 7025.0
       mean: 3851.1684
       stddev: 1576.7538
+    minimum: 0
   prompt_tokens:
     type: integer
     required: true
@@ -59,6 +60,7 @@ schema:
       max: 5987.0
       mean: 3187.6316
       stddev: 1516.4731
+    minimum: 0
   completion_tokens:
     type: integer
     required: true
@@ -67,6 +69,7 @@ schema:
       max: 1197.0
       mean: 663.5368
       stddev: 294.7058
+    minimum: 0
   total_cost:
     type: number
     required: true
@@ -75,17 +78,20 @@ schema:
       max: 0.035379
       mean: 0.0195
       stddev: 0.0067
+    minimum: 0
   parent_run_id:
     type: string
     required: false
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-unique: true
     x-null-fraction: 0.8421
   session_id:
     type: string
     required: true
     format: uuid
     pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$
+    x-unique: true
   inputs.input:
     type: string
     required: false
@@ -127,7 +133,11 @@ quality:
     - '- missing_count(session_id) = 0'
 lineage:
   upstream: []
-  downstream: []
-x-generated-at: '2026-04-01T14:59:27.884736Z'
+  downstream_nodes_from_lineage: []
+  registry_subscribers:
+  - week7-enforcer
+  note: Blast radius uses registry_subscribers as primary source. downstream_nodes_from_lineage
+    is enrichment only.
+x-generated-at: '2026-04-04T12:44:26.841367Z'
 x-source-hash: 987d09685c5942e1a4d7637805e593d29684074c89763e0d3b84cd419509ab60
-x-snapshot-id: 68bc7e3c-f290-433f-8cc1-4a2afc38e018
+x-snapshot-id: cb192354-70e8-4c89-b37b-d439a429e7b6
