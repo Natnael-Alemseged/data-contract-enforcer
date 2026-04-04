@@ -1,0 +1,25 @@
+{
+  "generated_at": "2026-04-04T13:16:00.258558Z",
+  "embedding_drift": {
+    "status": "PASS",
+    "drift_score": 0.0,
+    "threshold": 0.15,
+    "samples_embedded": 102,
+    "interpretation": "stable"
+  },
+  "prompt_input_validation": {
+    "valid": 12,
+    "quarantined": 0,
+    "total": 12,
+    "violation_rate": 0.0,
+    "status": "PASS"
+  },
+  "output_violation_rate": {
+    "total_outputs": 1,
+    "schema_violations": 0,
+    "violation_rate": 0.0,
+    "trend": "unknown",
+    "baseline_rate": null,
+    "status": "PASS"
+  }
+}

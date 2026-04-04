@@ -1,9 +1,11 @@
 {
-  "report_id": "92a855ae-4060-41ed-8ba6-6e3134b8d319",
+  "report_id": "66378de7-4cb7-4558-8bf5-c73da9f9965c",
   "contract_id": "week3-document-refinery-extractions",
   "snapshot_id": "36a082eafe5b811e2383b2e22cbbb31db61330c17ba68be169419479aef0dd11",
-  "run_timestamp": "2026-04-01T20:00:51.917700Z",
+  "run_timestamp": "2026-04-04T13:13:50.727555Z",
   "data_path": "outputs/week3/extractions.jsonl",
+  "mode": "AUDIT",
+  "pipeline_action": "PASS",
   "injected_violation": null,
   "total_checks": 59,
   "passed": 59,

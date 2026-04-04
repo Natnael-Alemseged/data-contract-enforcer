@@ -1,13 +1,15 @@
 {
-  "report_id": "ee0662cc-9981-477d-bac5-2c889c42e73e",
+  "report_id": "27db417c-3499-4dfe-8711-d1e4d29964e2",
   "contract_id": "week5-axiom-ledger-events",
-  "snapshot_id": "84874e44c9ecac48ae00e5ae3245a0e24044cc8c052aa1bda267a7c771661968",
-  "run_timestamp": "2026-04-01T20:00:52.109921Z",
-  "data_path": "outputs/week5/events.jsonl",
+  "snapshot_id": "18656641a66465b6c394906699131668dbc59394f2cd878ac4b0dbf44ca13222",
+  "run_timestamp": "2026-04-04T13:09:27.432067Z",
+  "data_path": "outputs/week5/events_canonical.jsonl",
+  "mode": "AUDIT",
+  "pipeline_action": "PASS",
   "injected_violation": null,
-  "total_checks": 363,
-  "passed": 350,
-  "failed": 13,
+  "total_checks": 352,
+  "passed": 352,
+  "failed": 0,
   "warned": 0,
   "errored": 0,
   "results": [
@@ -60,156 +62,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.stream_id.required",
-      "column_name": "stream_id",
-      "check_type": "required",
-      "status": "PASS",
-      "actual_value": "null_count=0",
-      "expected": "null_count=0",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.stream_id.type",
-      "column_name": "stream_id",
-      "check_type": "type",
-      "status": "PASS",
-      "actual_value": "dtype=str",
-      "expected": "type=string",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.stream_id.enum",
-      "column_name": "stream_id",
-      "check_type": "enum",
-      "status": "PASS",
-      "actual_value": "no enum clause",
-      "expected": "\u2014",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.stream_id.uuid_pattern",
-      "column_name": "stream_id",
-      "check_type": "uuid_pattern",
-      "status": "FAIL",
-      "actual_value": "95 non-UUID values in sample",
-      "expected": "format: uuid (^[0-9a-f-]{36}$)",
-      "severity": "CRITICAL",
-      "records_failing": 95,
-      "sample_failing": [
-        "docpkg-APEX-0001",
-        "loan-APEX-0001",
-        "agent-document_processing-sess-doc-a99d8859",
-        "agent-credit_analysis-sess-cre-1284d40d",
-        "credit-APEX-0001"
-      ],
-      "message": "`stream_id` contains values that don't match UUID format."
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.stream_position.required",
-      "column_name": "stream_position",
-      "check_type": "required",
-      "status": "PASS",
-      "actual_value": "null_count=0",
-      "expected": "null_count=0",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.stream_position.type",
-      "column_name": "stream_position",
-      "check_type": "type",
-      "status": "PASS",
-      "actual_value": "dtype=int64",
-      "expected": "type=integer",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.stream_position.enum",
-      "column_name": "stream_position",
-      "check_type": "enum",
-      "status": "PASS",
-      "actual_value": "no enum clause",
-      "expected": "\u2014",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.stream_position.range",
-      "column_name": "stream_position",
-      "check_type": "range",
-      "status": "PASS",
-      "actual_value": "min=0.0000, max=13.0000, mean=4.9474",
-      "expected": "min>=0, max<=None",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.global_position.required",
-      "column_name": "global_position",
-      "check_type": "required",
-      "status": "PASS",
-      "actual_value": "null_count=0",
-      "expected": "null_count=0",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.global_position.type",
-      "column_name": "global_position",
-      "check_type": "type",
-      "status": "PASS",
-      "actual_value": "dtype=int64",
-      "expected": "type=integer",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.global_position.enum",
-      "column_name": "global_position",
-      "check_type": "enum",
-      "status": "PASS",
-      "actual_value": "no enum clause",
-      "expected": "\u2014",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.global_position.range",
-      "column_name": "global_position",
-      "check_type": "range",
-      "status": "PASS",
-      "actual_value": "min=0.0000, max=94.0000, mean=47.0000",
-      "expected": "min>=0, max<=None",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
       "check_id": "week5-axiom-ledger-events.event_type.required",
       "column_name": "event_type",
       "check_type": "required",
@@ -246,8 +98,8 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.event_version.required",
-      "column_name": "event_version",
+      "check_id": "week5-axiom-ledger-events.aggregate_id.required",
+      "column_name": "aggregate_id",
       "check_type": "required",
       "status": "PASS",
       "actual_value": "null_count=0",
@@ -258,20 +110,20 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.event_version.type",
-      "column_name": "event_version",
+      "check_id": "week5-axiom-ledger-events.aggregate_id.type",
+      "column_name": "aggregate_id",
       "check_type": "type",
       "status": "PASS",
-      "actual_value": "dtype=int64",
-      "expected": "type=integer",
+      "actual_value": "dtype=str",
+      "expected": "type=string",
       "severity": "LOW",
       "records_failing": 0,
       "sample_failing": [],
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.event_version.enum",
-      "column_name": "event_version",
+      "check_id": "week5-axiom-ledger-events.aggregate_id.enum",
+      "column_name": "aggregate_id",
       "check_type": "enum",
       "status": "PASS",
       "actual_value": "no enum clause",
@@ -282,12 +134,168 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.event_version.range",
-      "column_name": "event_version",
+      "check_id": "week5-axiom-ledger-events.aggregate_type.required",
+      "column_name": "aggregate_type",
+      "check_type": "required",
+      "status": "PASS",
+      "actual_value": "null_count=0",
+      "expected": "null_count=0",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.aggregate_type.type",
+      "column_name": "aggregate_type",
+      "check_type": "type",
+      "status": "PASS",
+      "actual_value": "dtype=str",
+      "expected": "type=string",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.aggregate_type.enum",
+      "column_name": "aggregate_type",
+      "check_type": "enum",
+      "status": "PASS",
+      "actual_value": "no enum clause",
+      "expected": "\u2014",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.sequence_number.required",
+      "column_name": "sequence_number",
+      "check_type": "required",
+      "status": "PASS",
+      "actual_value": "null_count=0",
+      "expected": "null_count=0",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.sequence_number.type",
+      "column_name": "sequence_number",
+      "check_type": "type",
+      "status": "PASS",
+      "actual_value": "dtype=int64",
+      "expected": "type=integer",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.sequence_number.enum",
+      "column_name": "sequence_number",
+      "check_type": "enum",
+      "status": "PASS",
+      "actual_value": "no enum clause",
+      "expected": "\u2014",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.sequence_number.range",
+      "column_name": "sequence_number",
       "check_type": "range",
       "status": "PASS",
-      "actual_value": "min=1.0000, max=2.0000, mean=1.0211",
+      "actual_value": "min=0.0000, max=13.0000, mean=4.9474",
       "expected": "min>=0, max<=None",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.schema_version.required",
+      "column_name": "schema_version",
+      "check_type": "required",
+      "status": "PASS",
+      "actual_value": "null_count=0",
+      "expected": "null_count=0",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.schema_version.type",
+      "column_name": "schema_version",
+      "check_type": "type",
+      "status": "PASS",
+      "actual_value": "dtype=str",
+      "expected": "type=string",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.schema_version.enum",
+      "column_name": "schema_version",
+      "check_type": "enum",
+      "status": "PASS",
+      "actual_value": "all values in ['1', '2']",
+      "expected": "enum=['1', '2']",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.occurred_at.required",
+      "column_name": "occurred_at",
+      "check_type": "required",
+      "status": "PASS",
+      "actual_value": "null_count=0",
+      "expected": "null_count=0",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.occurred_at.type",
+      "column_name": "occurred_at",
+      "check_type": "type",
+      "status": "PASS",
+      "actual_value": "dtype=str",
+      "expected": "type=string",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.occurred_at.enum",
+      "column_name": "occurred_at",
+      "check_type": "enum",
+      "status": "PASS",
+      "actual_value": "no enum clause",
+      "expected": "\u2014",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.occurred_at.datetime_format",
+      "column_name": "occurred_at",
+      "check_type": "datetime_format",
+      "status": "PASS",
+      "actual_value": "all values parse as ISO 8601",
+      "expected": "format: date-time",
       "severity": "LOW",
       "records_failing": 0,
       "sample_failing": [],
@@ -366,20 +374,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.payload.package_id.uuid_pattern",
-      "column_name": "payload.package_id",
-      "check_type": "uuid_pattern",
-      "status": "FAIL",
-      "actual_value": "10 non-UUID values in sample",
-      "expected": "format: uuid (^[0-9a-f-]{36}$)",
-      "severity": "CRITICAL",
-      "records_failing": 10,
-      "sample_failing": [
-        "APEX-0001"
-      ],
-      "message": "`payload.package_id` contains values that don't match UUID format."
-    },
-    {
       "check_id": "week5-axiom-ledger-events.payload.application_id.type",
       "column_name": "payload.application_id",
       "check_type": "type",
@@ -402,20 +396,6 @@
       "records_failing": 0,
       "sample_failing": [],
       "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.payload.application_id.uuid_pattern",
-      "column_name": "payload.application_id",
-      "check_type": "uuid_pattern",
-      "status": "FAIL",
-      "actual_value": "46 non-UUID values in sample",
-      "expected": "format: uuid (^[0-9a-f-]{36}$)",
-      "severity": "CRITICAL",
-      "records_failing": 46,
-      "sample_failing": [
-        "APEX-0001"
-      ],
-      "message": "`payload.application_id` contains values that don't match UUID format."
     },
     {
       "check_id": "week5-axiom-ledger-events.payload.created_at.type",
@@ -454,6 +434,150 @@
       "message": ""
     },
     {
+      "check_id": "week5-axiom-ledger-events.metadata.causation_id.type",
+      "column_name": "metadata.causation_id",
+      "check_type": "type",
+      "status": "PASS",
+      "actual_value": "dtype=object",
+      "expected": "type=string",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.metadata.causation_id.enum",
+      "column_name": "metadata.causation_id",
+      "check_type": "enum",
+      "status": "PASS",
+      "actual_value": "no enum clause",
+      "expected": "\u2014",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.metadata.correlation_id.required",
+      "column_name": "metadata.correlation_id",
+      "check_type": "required",
+      "status": "PASS",
+      "actual_value": "null_count=0",
+      "expected": "null_count=0",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.metadata.correlation_id.type",
+      "column_name": "metadata.correlation_id",
+      "check_type": "type",
+      "status": "PASS",
+      "actual_value": "dtype=str",
+      "expected": "type=string",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.metadata.correlation_id.enum",
+      "column_name": "metadata.correlation_id",
+      "check_type": "enum",
+      "status": "PASS",
+      "actual_value": "no enum clause",
+      "expected": "\u2014",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.metadata.correlation_id.uuid_pattern",
+      "column_name": "metadata.correlation_id",
+      "check_type": "uuid_pattern",
+      "status": "PASS",
+      "actual_value": "all values match UUID pattern",
+      "expected": "format: uuid",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.metadata.user_id.required",
+      "column_name": "metadata.user_id",
+      "check_type": "required",
+      "status": "PASS",
+      "actual_value": "null_count=0",
+      "expected": "null_count=0",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.metadata.user_id.type",
+      "column_name": "metadata.user_id",
+      "check_type": "type",
+      "status": "PASS",
+      "actual_value": "dtype=str",
+      "expected": "type=string",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.metadata.user_id.enum",
+      "column_name": "metadata.user_id",
+      "check_type": "enum",
+      "status": "PASS",
+      "actual_value": "no enum clause",
+      "expected": "\u2014",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.metadata.source_service.required",
+      "column_name": "metadata.source_service",
+      "check_type": "required",
+      "status": "PASS",
+      "actual_value": "null_count=0",
+      "expected": "null_count=0",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.metadata.source_service.type",
+      "column_name": "metadata.source_service",
+      "check_type": "type",
+      "status": "PASS",
+      "actual_value": "dtype=str",
+      "expected": "type=string",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.metadata.source_service.enum",
+      "column_name": "metadata.source_service",
+      "check_type": "enum",
+      "status": "PASS",
+      "actual_value": "all values in ['week5-axiom-ledger']",
+      "expected": "enum=['week5-axiom-ledger']",
+      "severity": "LOW",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": ""
+    },
+    {
       "check_id": "week5-axiom-ledger-events.payload.document_id.type",
       "column_name": "payload.document_id",
       "check_type": "type",
@@ -476,22 +600,6 @@
       "records_failing": 0,
       "sample_failing": [],
       "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.payload.document_id.uuid_pattern",
-      "column_name": "payload.document_id",
-      "check_type": "uuid_pattern",
-      "status": "FAIL",
-      "actual_value": "11 non-UUID values in sample",
-      "expected": "format: uuid (^[0-9a-f-]{36}$)",
-      "severity": "CRITICAL",
-      "records_failing": 11,
-      "sample_failing": [
-        "doc-application_proposal-APEX-000",
-        "doc-income_statement-APEX-000",
-        "doc-balance_sheet-APEX-000"
-      ],
-      "message": "`payload.document_id` contains values that don't match UUID format."
     },
     {
       "check_id": "week5-axiom-ledger-events.payload.document_type.type",
@@ -770,24 +878,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.payload.session_id.uuid_pattern",
-      "column_name": "payload.session_id",
-      "check_type": "uuid_pattern",
-      "status": "FAIL",
-      "actual_value": "74 non-UUID values in sample",
-      "expected": "format: uuid (^[0-9a-f-]{36}$)",
-      "severity": "CRITICAL",
-      "records_failing": 74,
-      "sample_failing": [
-        "sess-doc-a99d8859",
-        "sess-cre-1284d40d",
-        "sess-fra-c5267180",
-        "sess-com-f012f31e",
-        "sess-dec-1f57ec3a"
-      ],
-      "message": "`payload.session_id` contains values that don't match UUID format."
-    },
-    {
       "check_id": "week5-axiom-ledger-events.payload.agent_type.type",
       "column_name": "payload.agent_type",
       "check_type": "type",
@@ -834,24 +924,6 @@
       "records_failing": 0,
       "sample_failing": [],
       "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.payload.agent_id.uuid_pattern",
-      "column_name": "payload.agent_id",
-      "check_type": "uuid_pattern",
-      "status": "FAIL",
-      "actual_value": "5 non-UUID values in sample",
-      "expected": "format: uuid (^[0-9a-f-]{36}$)",
-      "severity": "CRITICAL",
-      "records_failing": 5,
-      "sample_failing": [
-        "agent-docproc-cli",
-        "agent-credit-cli",
-        "agent-fraud-cli",
-        "agent-compliance-cli",
-        "agent-orch-cli"
-      ],
-      "message": "`payload.agent_id` contains values that don't match UUID format."
     },
     {
       "check_id": "week5-axiom-ledger-events.payload.model_version.type",
@@ -962,18 +1034,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.payload.context_token_count.statistical_drift",
-      "column_name": "payload.context_token_count",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=1000.0000, z=0.00",
-      "expected": "|z| <= 2.0",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
       "check_id": "week5-axiom-ledger-events.payload.started_at.type",
       "column_name": "payload.started_at",
       "check_type": "type",
@@ -1010,48 +1070,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.metadata.causation_id.type",
-      "column_name": "metadata.causation_id",
-      "check_type": "type",
-      "status": "PASS",
-      "actual_value": "dtype=str",
-      "expected": "type=string",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.metadata.causation_id.enum",
-      "column_name": "metadata.causation_id",
-      "check_type": "enum",
-      "status": "PASS",
-      "actual_value": "no enum clause",
-      "expected": "\u2014",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.metadata.causation_id.uuid_pattern",
-      "column_name": "metadata.causation_id",
-      "check_type": "uuid_pattern",
-      "status": "FAIL",
-      "actual_value": "83 non-UUID values in sample",
-      "expected": "format: uuid (^[0-9a-f-]{36}$)",
-      "severity": "CRITICAL",
-      "records_failing": 83,
-      "sample_failing": [
-        "sess-doc-a99d8859",
-        "sess-cre-1284d40d",
-        "sess-fra-c5267180",
-        "sess-com-f012f31e",
-        "sess-dec-1f57ec3a"
-      ],
-      "message": "`metadata.causation_id` contains values that don't match UUID format."
-    },
-    {
       "check_id": "week5-axiom-ledger-events.payload.validation_duration_ms.type",
       "column_name": "payload.validation_duration_ms",
       "check_type": "type",
@@ -1082,18 +1100,6 @@
       "status": "PASS",
       "actual_value": "min=0.0000, max=0.0000, mean=0.0000",
       "expected": "min>=0, max<=None",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.payload.validation_duration_ms.statistical_drift",
-      "column_name": "payload.validation_duration_ms",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=0.0000, z=0.00",
-      "expected": "|z| <= 2.0",
       "severity": "LOW",
       "records_failing": 0,
       "sample_failing": [],
@@ -1196,18 +1202,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.payload.node_sequence.statistical_drift",
-      "column_name": "payload.node_sequence",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=4.0294, z=0.00",
-      "expected": "|z| <= 2.0",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
       "check_id": "week5-axiom-ledger-events.payload.llm_called.type",
       "column_name": "payload.llm_called",
       "check_type": "type",
@@ -1268,18 +1262,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.payload.llm_tokens_input.statistical_drift",
-      "column_name": "payload.llm_tokens_input",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=120.0000, z=0.00",
-      "expected": "|z| <= 2.0",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
       "check_id": "week5-axiom-ledger-events.payload.llm_tokens_output.type",
       "column_name": "payload.llm_tokens_output",
       "check_type": "type",
@@ -1310,18 +1292,6 @@
       "status": "PASS",
       "actual_value": "min=80.0000, max=80.0000, mean=80.0000",
       "expected": "min>=0, max<=None",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.payload.llm_tokens_output.statistical_drift",
-      "column_name": "payload.llm_tokens_output",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=80.0000, z=0.00",
-      "expected": "|z| <= 2.0",
       "severity": "LOW",
       "records_failing": 0,
       "sample_failing": [],
@@ -1364,18 +1334,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.payload.llm_cost_usd.statistical_drift",
-      "column_name": "payload.llm_cost_usd",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=0.0016, z=0.00",
-      "expected": "|z| <= 2.0",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
       "check_id": "week5-axiom-ledger-events.payload.duration_ms.type",
       "column_name": "payload.duration_ms",
       "check_type": "type",
@@ -1406,18 +1364,6 @@
       "status": "PASS",
       "actual_value": "min=0.0000, max=15782.0000, mean=536.1765",
       "expected": "min>=0, max<=None",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.payload.duration_ms.statistical_drift",
-      "column_name": "payload.duration_ms",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=536.1765, z=0.00",
-      "expected": "|z| <= 2.0",
       "severity": "LOW",
       "records_failing": 0,
       "sample_failing": [],
@@ -1814,18 +1760,6 @@
       "status": "PASS",
       "actual_value": "min=0.0000, max=15782.0000, mean=2575.7143",
       "expected": "min>=0, max<=None",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.payload.tool_duration_ms.statistical_drift",
-      "column_name": "payload.tool_duration_ms",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=2575.7143, z=0.00",
-      "expected": "|z| <= 2.0",
       "severity": "LOW",
       "records_failing": 0,
       "sample_failing": [],
@@ -2324,18 +2258,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.payload.total_nodes_executed.statistical_drift",
-      "column_name": "payload.total_nodes_executed",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=6.8000, z=0.00",
-      "expected": "|z| <= 2.0",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
       "check_id": "week5-axiom-ledger-events.payload.total_llm_calls.type",
       "column_name": "payload.total_llm_calls",
       "check_type": "type",
@@ -2366,18 +2288,6 @@
       "status": "PASS",
       "actual_value": "min=1.0000, max=1.0000, mean=1.0000",
       "expected": "min>=0, max<=None",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.payload.total_llm_calls.statistical_drift",
-      "column_name": "payload.total_llm_calls",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=1.0000, z=0.00",
-      "expected": "|z| <= 2.0",
       "severity": "LOW",
       "records_failing": 0,
       "sample_failing": [],
@@ -2420,18 +2330,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.payload.total_tokens_used.statistical_drift",
-      "column_name": "payload.total_tokens_used",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=200.0000, z=0.00",
-      "expected": "|z| <= 2.0",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
       "check_id": "week5-axiom-ledger-events.payload.total_cost_usd.type",
       "column_name": "payload.total_cost_usd",
       "check_type": "type",
@@ -2468,18 +2366,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.payload.total_cost_usd.statistical_drift",
-      "column_name": "payload.total_cost_usd",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=0.0016, z=0.00",
-      "expected": "|z| <= 2.0",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
       "check_id": "week5-axiom-ledger-events.payload.total_duration_ms.type",
       "column_name": "payload.total_duration_ms",
       "check_type": "type",
@@ -2510,18 +2396,6 @@
       "status": "PASS",
       "actual_value": "min=3.0000, max=18243.0000, mean=3652.6000",
       "expected": "min>=0, max<=None",
-      "severity": "LOW",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.payload.total_duration_ms.statistical_drift",
-      "column_name": "payload.total_duration_ms",
-      "check_type": "statistical_drift",
-      "status": "PASS",
-      "actual_value": "mean=3652.6000, z=0.00",
-      "expected": "|z| <= 2.0",
       "severity": "LOW",
       "records_failing": 0,
       "sample_failing": [],
@@ -2574,20 +2448,6 @@
       "records_failing": 0,
       "sample_failing": [],
       "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.payload.applicant_id.uuid_pattern",
-      "column_name": "payload.applicant_id",
-      "check_type": "uuid_pattern",
-      "status": "FAIL",
-      "actual_value": "2 non-UUID values in sample",
-      "expected": "format: uuid (^[0-9a-f-]{36}$)",
-      "severity": "CRITICAL",
-      "records_failing": 2,
-      "sample_failing": [
-        "COMP-019"
-      ],
-      "message": "`payload.applicant_id` contains values that don't match UUID format."
     },
     {
       "check_id": "week5-axiom-ledger-events.payload.requested_amount_usd.type",
@@ -3046,20 +2906,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.payload.model_deployment_id.uuid_pattern",
-      "column_name": "payload.model_deployment_id",
-      "check_type": "uuid_pattern",
-      "status": "FAIL",
-      "actual_value": "1 non-UUID values in sample",
-      "expected": "format: uuid (^[0-9a-f-]{36}$)",
-      "severity": "CRITICAL",
-      "records_failing": 1,
-      "sample_failing": [
-        "dep-f23e12df"
-      ],
-      "message": "`payload.model_deployment_id` contains values that don't match UUID format."
-    },
-    {
       "check_id": "week5-axiom-ledger-events.payload.input_data_hash.type",
       "column_name": "payload.input_data_hash",
       "check_type": "type",
@@ -3142,22 +2988,6 @@
       "records_failing": 0,
       "sample_failing": [],
       "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.payload.triggered_by_event_id.uuid_pattern",
-      "column_name": "payload.triggered_by_event_id",
-      "check_type": "uuid_pattern",
-      "status": "FAIL",
-      "actual_value": "3 non-UUID values in sample",
-      "expected": "format: uuid (^[0-9a-f-]{36}$)",
-      "severity": "CRITICAL",
-      "records_failing": 3,
-      "sample_failing": [
-        "sess-cre-1284d40d",
-        "sess-fra-c5267180",
-        "sess-com-f012f31e"
-      ],
-      "message": "`payload.triggered_by_event_id` contains values that don't match UUID format."
     },
     {
       "check_id": "week5-axiom-ledger-events.payload.screening_model_version.type",
@@ -3386,24 +3216,6 @@
       "records_failing": 0,
       "sample_failing": [],
       "message": ""
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.payload.rule_id.uuid_pattern",
-      "column_name": "payload.rule_id",
-      "check_type": "uuid_pattern",
-      "status": "FAIL",
-      "actual_value": "6 non-UUID values in sample",
-      "expected": "format: uuid (^[0-9a-f-]{36}$)",
-      "severity": "CRITICAL",
-      "records_failing": 6,
-      "sample_failing": [
-        "REG-001",
-        "REG-002",
-        "REG-003",
-        "REG-004",
-        "REG-005"
-      ],
-      "message": "`payload.rule_id` contains values that don't match UUID format."
     },
     {
       "check_id": "week5-axiom-ledger-events.payload.rule_name.type",
@@ -3826,20 +3638,6 @@
       "message": ""
     },
     {
-      "check_id": "week5-axiom-ledger-events.payload.orchestrator_session_id.uuid_pattern",
-      "column_name": "payload.orchestrator_session_id",
-      "check_type": "uuid_pattern",
-      "status": "FAIL",
-      "actual_value": "1 non-UUID values in sample",
-      "expected": "format: uuid (^[0-9a-f-]{36}$)",
-      "severity": "CRITICAL",
-      "records_failing": 1,
-      "sample_failing": [
-        "sess-dec-1f57ec3a"
-      ],
-      "message": "`payload.orchestrator_session_id` contains values that don't match UUID format."
-    },
-    {
       "check_id": "week5-axiom-ledger-events.payload.confidence.type",
       "column_name": "payload.confidence",
       "check_type": "type",
@@ -4140,90 +3938,6 @@
       "message": "Quality check `- missing_count(event_id) = 0`: actual=0, expected = 0.0."
     },
     {
-      "check_id": "week5-axiom-ledger-events.quality.duplicate_count_event_id_eq",
-      "column_name": "event_id",
-      "check_type": "quality_spec",
-      "status": "PASS",
-      "actual_value": "0",
-      "expected": "duplicate_count(event_id) = 0.0",
-      "severity": "CRITICAL",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": "Quality check `- duplicate_count(event_id) = 0`: actual=0, expected = 0.0."
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.quality.missing_count_stream_id_eq",
-      "column_name": "stream_id",
-      "check_type": "quality_spec",
-      "status": "PASS",
-      "actual_value": "0",
-      "expected": "missing_count(stream_id) = 0.0",
-      "severity": "CRITICAL",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": "Quality check `- missing_count(stream_id) = 0`: actual=0, expected = 0.0."
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.quality.duplicate_count_stream_id_eq",
-      "column_name": "stream_id",
-      "check_type": "quality_spec",
-      "status": "FAIL",
-      "actual_value": "85",
-      "expected": "duplicate_count(stream_id) = 0.0",
-      "severity": "CRITICAL",
-      "records_failing": 85,
-      "sample_failing": [],
-      "message": "Quality check `- duplicate_count(stream_id) = 0`: actual=85, expected = 0.0."
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.quality.missing_count_stream_position_eq",
-      "column_name": "stream_position",
-      "check_type": "quality_spec",
-      "status": "PASS",
-      "actual_value": "0",
-      "expected": "missing_count(stream_position) = 0.0",
-      "severity": "CRITICAL",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": "Quality check `- missing_count(stream_position) = 0`: actual=0, expected = 0.0."
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.quality.min_stream_position_gteq",
-      "column_name": "stream_position",
-      "check_type": "quality_spec",
-      "status": "PASS",
-      "actual_value": "0.0",
-      "expected": "min(stream_position) >= 0.0",
-      "severity": "HIGH",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": "Quality check `- min(stream_position) >= 0`: actual=0.0, expected >= 0.0."
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.quality.missing_count_global_position_eq",
-      "column_name": "global_position",
-      "check_type": "quality_spec",
-      "status": "PASS",
-      "actual_value": "0",
-      "expected": "missing_count(global_position) = 0.0",
-      "severity": "CRITICAL",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": "Quality check `- missing_count(global_position) = 0`: actual=0, expected = 0.0."
-    },
-    {
-      "check_id": "week5-axiom-ledger-events.quality.min_global_position_gteq",
-      "column_name": "global_position",
-      "check_type": "quality_spec",
-      "status": "PASS",
-      "actual_value": "0.0",
-      "expected": "min(global_position) >= 0.0",
-      "severity": "HIGH",
-      "records_failing": 0,
-      "sample_failing": [],
-      "message": "Quality check `- min(global_position) >= 0`: actual=0.0, expected >= 0.0."
-    },
-    {
       "check_id": "week5-axiom-ledger-events.quality.missing_count_event_type_eq",
       "column_name": "event_type",
       "check_type": "quality_spec",
@@ -4236,16 +3950,64 @@
       "message": "Quality check `- missing_count(event_type) = 0`: actual=0, expected = 0.0."
     },
     {
-      "check_id": "week5-axiom-ledger-events.quality.missing_count_event_version_eq",
-      "column_name": "event_version",
+      "check_id": "week5-axiom-ledger-events.quality.missing_count_aggregate_id_eq",
+      "column_name": "aggregate_id",
       "check_type": "quality_spec",
       "status": "PASS",
       "actual_value": "0",
-      "expected": "missing_count(event_version) = 0.0",
+      "expected": "missing_count(aggregate_id) = 0.0",
       "severity": "CRITICAL",
       "records_failing": 0,
       "sample_failing": [],
-      "message": "Quality check `- missing_count(event_version) = 0`: actual=0, expected = 0.0."
+      "message": "Quality check `- missing_count(aggregate_id) = 0`: actual=0, expected = 0.0."
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.quality.missing_count_aggregate_type_eq",
+      "column_name": "aggregate_type",
+      "check_type": "quality_spec",
+      "status": "PASS",
+      "actual_value": "0",
+      "expected": "missing_count(aggregate_type) = 0.0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Quality check `- missing_count(aggregate_type) = 0`: actual=0, expected = 0.0."
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.quality.missing_count_sequence_number_eq",
+      "column_name": "sequence_number",
+      "check_type": "quality_spec",
+      "status": "PASS",
+      "actual_value": "0",
+      "expected": "missing_count(sequence_number) = 0.0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Quality check `- missing_count(sequence_number) = 0`: actual=0, expected = 0.0."
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.quality.missing_count_schema_version_eq",
+      "column_name": "schema_version",
+      "check_type": "quality_spec",
+      "status": "PASS",
+      "actual_value": "0",
+      "expected": "missing_count(schema_version) = 0.0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Quality check `- missing_count(schema_version) = 0`: actual=0, expected = 0.0."
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.quality.missing_count_occurred_at_eq",
+      "column_name": "occurred_at",
+      "check_type": "quality_spec",
+      "status": "PASS",
+      "actual_value": "0",
+      "expected": "missing_count(occurred_at) = 0.0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Quality check `- missing_count(occurred_at) = 0`: actual=0, expected = 0.0."
     },
     {
       "check_id": "week5-axiom-ledger-events.quality.missing_count_recorded_at_eq",
@@ -4258,6 +4020,66 @@
       "records_failing": 0,
       "sample_failing": [],
       "message": "Quality check `- missing_count(recorded_at) = 0`: actual=0, expected = 0.0."
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.quality.missing_count_metadata_correlation_id_eq",
+      "column_name": "metadata_correlation_id",
+      "check_type": "quality_spec",
+      "status": "PASS",
+      "actual_value": "0",
+      "expected": "missing_count(metadata_correlation_id) = 0.0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Quality check `- missing_count(metadata_correlation_id) = 0`: actual=0, expected = 0.0."
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.quality.duplicate_count_metadata_correlation_id_eq",
+      "column_name": "metadata_correlation_id",
+      "check_type": "quality_spec",
+      "status": "PASS",
+      "actual_value": "0",
+      "expected": "duplicate_count(metadata_correlation_id) = 0.0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Quality check `- duplicate_count(metadata_correlation_id) = 0`: actual=0, expected = 0.0."
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.quality.missing_count_metadata_user_id_eq",
+      "column_name": "metadata_user_id",
+      "check_type": "quality_spec",
+      "status": "PASS",
+      "actual_value": "0",
+      "expected": "missing_count(metadata_user_id) = 0.0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Quality check `- missing_count(metadata_user_id) = 0`: actual=0, expected = 0.0."
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.quality.duplicate_count_metadata_user_id_eq",
+      "column_name": "metadata_user_id",
+      "check_type": "quality_spec",
+      "status": "PASS",
+      "actual_value": "0",
+      "expected": "duplicate_count(metadata_user_id) = 0.0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Quality check `- duplicate_count(metadata_user_id) = 0`: actual=0, expected = 0.0."
+    },
+    {
+      "check_id": "week5-axiom-ledger-events.quality.missing_count_metadata_source_service_eq",
+      "column_name": "metadata_source_service",
+      "check_type": "quality_spec",
+      "status": "PASS",
+      "actual_value": "0",
+      "expected": "missing_count(metadata_source_service) = 0.0",
+      "severity": "CRITICAL",
+      "records_failing": 0,
+      "sample_failing": [],
+      "message": "Quality check `- missing_count(metadata_source_service) = 0`: actual=0, expected = 0.0."
     },
     {
       "check_id": "week5-axiom-ledger-events.quality.min_payload_context_token_count_gteq",
