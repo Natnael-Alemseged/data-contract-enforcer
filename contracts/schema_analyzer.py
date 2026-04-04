@@ -302,11 +302,26 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     snap_root = ROOT / args.snapshots
-    out_root  = ROOT / args.output
+    out_path  = ROOT / args.output
 
+    # If --output ends with .json, collect all reports into a single file
+    single_file = str(out_path).endswith(".json")
+    out_root = out_path.parent if single_file else out_path
+
+    all_reports = []
     if args.all or not args.contract_id:
         contract_dirs = [d for d in snap_root.iterdir() if d.is_dir()]
         for d in sorted(contract_dirs):
-            analyze(d.name, snap_root, out_root)
+            reports = analyze(d.name, snap_root, out_root)
+            if single_file and reports:
+                all_reports.extend(reports)
     else:
-        analyze(args.contract_id, snap_root, out_root)
+        reports = analyze(args.contract_id, snap_root, out_root)
+        if single_file and reports:
+            all_reports.extend(reports)
+
+    if single_file:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        with open(out_path, "w") as f:
+            json.dump(all_reports, f, indent=2)
+        print(f"\n[analyzer] combined report → {out_path}")
