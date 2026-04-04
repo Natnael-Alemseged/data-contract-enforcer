@@ -32,11 +32,26 @@ import argparse
 import json
 import uuid
 from datetime import datetime, timezone
+from difflib import SequenceMatcher
 from pathlib import Path
 
 import yaml
 
 ROOT = Path(__file__).parent.parent
+REGISTRY_PATH = ROOT / "contract_registry" / "subscriptions.yaml"
+
+# Narrow-type pairs: (old_dtype_keyword, new_dtype_keyword) that lose precision
+NARROW_TYPE_PAIRS = [
+    ("float", "int"),
+    ("double", "int"),
+    ("float64", "int64"),
+    ("float64", "int32"),
+    ("float32", "int32"),
+    ("float32", "int16"),
+    ("str", "int"),
+    ("str", "float"),
+    ("datetime", "str"),
+]
 
 
 # ── helpers ───────────────────────────────────────────────────────────────────
@@ -98,15 +113,28 @@ def classify_changes(old_snap: dict, new_snap: dict) -> list[dict]:
         old_c = old_cols[col]
         new_c = new_cols[col]
 
-        # Type change (BREAKING)
+        # Type change (BREAKING or CRITICAL for narrow-type)
         old_dtype = str(old_c.get("dtype", ""))
         new_dtype = str(new_c.get("dtype", ""))
         if old_dtype != new_dtype:
+            # Check for narrow-type (precision loss) — escalate to CRITICAL
+            is_narrow = any(
+                old_dtype.lower().startswith(old_kw) and new_dtype.lower().startswith(new_kw)
+                for old_kw, new_kw in NARROW_TYPE_PAIRS
+            )
+            severity = "CRITICAL" if is_narrow else "BREAKING"
+            detail = (
+                f"NARROW-TYPE: dtype changed from '{old_dtype}' to '{new_dtype}' — "
+                f"precision loss (e.g. float->int truncates decimals). Consumers expecting "
+                f"fractional values will receive truncated data."
+                if is_narrow else
+                f"dtype changed from '{old_dtype}' to '{new_dtype}'."
+            )
             changes.append({
                 "column": col,
                 "change_type": "type_changed",
-                "severity": "BREAKING",
-                "detail": f"dtype changed from '{old_dtype}' to '{new_dtype}'.",
+                "severity": severity,
+                "detail": detail,
                 "old_value": old_dtype,
                 "new_value": new_dtype,
             })
@@ -193,48 +221,190 @@ def classify_changes(old_snap: dict, new_snap: dict) -> list[dict]:
                         "new_value": new_mean,
                     })
 
+        # Enum value changes — compare sample_values or enum lists
+        old_enum = set(old_c.get("enum", old_c.get("sample_values", [])) or [])
+        new_enum = set(new_c.get("enum", new_c.get("sample_values", [])) or [])
+        if old_enum and new_enum:
+            removed_vals = old_enum - new_enum
+            added_vals = new_enum - old_enum
+            if removed_vals:
+                changes.append({
+                    "column": col,
+                    "change_type": "enum_values_removed",
+                    "severity": "BREAKING",
+                    "detail": f"Enum values removed: {sorted(removed_vals)}. Consumers relying on these values will break.",
+                    "old_value": sorted(old_enum),
+                    "new_value": sorted(new_enum),
+                })
+            if added_vals and not removed_vals:
+                changes.append({
+                    "column": col,
+                    "change_type": "enum_values_added",
+                    "severity": "COMPATIBLE",
+                    "detail": f"Enum values added: {sorted(added_vals)}. Existing consumers unaffected.",
+                    "old_value": sorted(old_enum),
+                    "new_value": sorted(new_enum),
+                })
+
+    # Rename detection heuristic — removed + added columns with similar dtype/stats
+    removed_cols = {col: old_cols[col] for col in old_cols if col not in new_cols}
+    added_cols = {col: new_cols[col] for col in new_cols if col not in old_cols}
+    for rem_name, rem_info in removed_cols.items():
+        for add_name, add_info in added_cols.items():
+            same_dtype = str(rem_info.get("dtype", "")) == str(add_info.get("dtype", ""))
+            name_sim = SequenceMatcher(None, rem_name, add_name).ratio()
+            if same_dtype and name_sim > 0.5:
+                changes.append({
+                    "column": f"{rem_name} -> {add_name}",
+                    "change_type": "potential_rename",
+                    "severity": "BREAKING",
+                    "detail": (
+                        f"Column '{rem_name}' removed and '{add_name}' added with same dtype "
+                        f"'{rem_info.get('dtype')}' (name similarity: {name_sim:.0%}). "
+                        f"Likely a rename — consumers referencing '{rem_name}' will break."
+                    ),
+                    "old_value": rem_name,
+                    "new_value": add_name,
+                })
+
     return changes
 
 
 # ── migration impact summary ──────────────────────────────────────────────────
 
-def migration_impact(changes: list[dict]) -> dict:
-    breaking = [c for c in changes if c["severity"] == "BREAKING"]
-    warns    = [c for c in changes if c["severity"] == "WARN"]
-    compat   = [c for c in changes if c["severity"] == "COMPATIBLE"]
+def load_registry(registry_path: Path = REGISTRY_PATH) -> dict:
+    """Load consumer registry for impact analysis."""
+    if not registry_path.exists():
+        return {"subscriptions": []}
+    with open(registry_path) as f:
+        return yaml.safe_load(f) or {"subscriptions": []}
 
-    return {
-        "total_changes":     len(changes),
-        "breaking_count":    len(breaking),
-        "warn_count":        len(warns),
-        "compatible_count":  len(compat),
+
+def migration_impact(
+    changes: list[dict],
+    old_snap: dict | None = None,
+    registry: dict | None = None,
+) -> dict:
+    breaking  = [c for c in changes if c["severity"] in ("BREAKING", "CRITICAL")]
+    criticals = [c for c in changes if c["severity"] == "CRITICAL"]
+    warns     = [c for c in changes if c["severity"] == "WARN"]
+    compat    = [c for c in changes if c["severity"] == "COMPATIBLE"]
+
+    # Rollback plan — data-driven based on changes detected
+    rollback_steps = []
+    if breaking or criticals:
+        snap_id = old_snap.get("snapshot_id", "unknown") if old_snap else "unknown"
+        rollback_steps.append(f"Revert to snapshot {snap_id}")
+        rollback_steps.append("Re-validate consumers against previous schema")
+        if any(c["change_type"] == "type_changed" for c in breaking + criticals):
+            rollback_steps.append("Cast affected columns back to original dtypes before re-deploy")
+        if any(c["change_type"] == "column_removed" for c in breaking):
+            rollback_steps.append("Restore removed columns from backup or prior snapshot")
+        if any(c["change_type"] == "enum_values_removed" for c in breaking):
+            rollback_steps.append("Re-add removed enum values to maintain consumer compatibility")
+        rollback_steps.append("Run full contract validation suite after rollback")
+
+    # Per-consumer failure mode analysis
+    consumer_impact = []
+    if registry and breaking:
+        for sub in registry.get("subscriptions", []):
+            affected_fields = []
+            for c in breaking + criticals:
+                col = c["column"]
+                # Check if this subscriber consumes the affected column
+                consumed = sub.get("fields_consumed", [])
+                breaking_flds = [bf["field"] for bf in sub.get("breaking_fields", [])]
+                if col in consumed or col in breaking_flds or any(col.startswith(f) for f in consumed):
+                    reason = next(
+                        (bf["reason"] for bf in sub.get("breaking_fields", []) if bf["field"] == col),
+                        f"Consumes field '{col}' which has a {c['change_type']} change",
+                    )
+                    affected_fields.append({
+                        "field": col,
+                        "change_type": c["change_type"],
+                        "severity": c["severity"],
+                        "reason": reason,
+                    })
+            if affected_fields:
+                consumer_impact.append({
+                    "subscriber_id": sub["subscriber_id"],
+                    "subscriber_team": sub.get("subscriber_team", "unknown"),
+                    "contact": sub.get("contact", "unknown"),
+                    "validation_mode": sub.get("validation_mode", "AUDIT"),
+                    "affected_fields": affected_fields,
+                })
+
+    result = {
+        "total_changes":      len(changes),
+        "breaking_count":     len(breaking),
+        "critical_count":     len(criticals),
+        "warn_count":         len(warns),
+        "compatible_count":   len(compat),
         "migration_required": len(breaking) > 0,
-        "breaking_columns":  [c["column"] for c in breaking],
+        "breaking_columns":   [c["column"] for c in breaking],
         "recommendation": (
+            "BLOCK deployment — CRITICAL narrow-type changes detected. Immediate rollback required."
+            if criticals else
             "BLOCK deployment — breaking changes detected. Run migration scripts before promoting."
             if breaking else
             "WARN — review distribution shifts before promoting."
             if warns else
             "SAFE to deploy — no breaking changes."
         ),
+        "rollback_plan": rollback_steps,
+        "consumer_impact": consumer_impact,
     }
+
+    return result
 
 
 # ── main analysis ─────────────────────────────────────────────────────────────
 
-def analyze(contract_id: str, snapshots_dir: Path, output_dir: Path) -> list[dict]:
+def analyze(
+    contract_id: str,
+    snapshots_dir: Path,
+    output_dir: Path,
+    since: str | None = None,
+    registry_path: Path | None = None,
+) -> list[dict]:
     snap_dir = snapshots_dir / contract_id
     if not snap_dir.exists():
         print(f"[analyzer] No snapshot directory for {contract_id}")
         return []
 
     snap_files = sorted(snap_dir.glob("*.yaml"))
+
+    # Filter by --since date if provided
+    if since:
+        since_dt = datetime.fromisoformat(since)
+        if since_dt.tzinfo is None:
+            since_dt = since_dt.replace(tzinfo=timezone.utc)
+        filtered = []
+        for sf in snap_files:
+            snap = load_snapshot(sf)
+            captured = snap.get("captured_at", "")
+            if captured:
+                cap_str = str(captured).replace("'", "")
+                try:
+                    cap_dt = datetime.fromisoformat(cap_str.replace("Z", "+00:00"))
+                    if cap_dt >= since_dt:
+                        filtered.append(sf)
+                except ValueError:
+                    filtered.append(sf)  # include if can't parse
+            else:
+                filtered.append(sf)
+        snap_files = filtered
+
     if len(snap_files) < 2:
         print(f"[analyzer] Need at least 2 snapshots to diff — found {len(snap_files)}")
         return []
 
     print(f"\n[analyzer] contract : {contract_id}")
     print(f"[analyzer] snapshots: {len(snap_files)} (diffing consecutive pairs)")
+
+    # Load consumer registry for per-consumer failure analysis
+    reg_path = registry_path or REGISTRY_PATH
+    registry = load_registry(reg_path)
 
     output_dir.mkdir(parents=True, exist_ok=True)
     reports = []
@@ -247,7 +417,7 @@ def analyze(contract_id: str, snapshots_dir: Path, output_dir: Path) -> list[dic
         new_snap = load_snapshot(new_path)
 
         changes = classify_changes(old_snap, new_snap)
-        impact  = migration_impact(changes)
+        impact  = migration_impact(changes, old_snap=old_snap, registry=registry)
 
         report = {
             "report_id":    rng_uuid(),
@@ -278,7 +448,7 @@ def analyze(contract_id: str, snapshots_dir: Path, output_dir: Path) -> list[dic
         if impact["breaking_columns"]:
             print(f"  breaking columns: {', '.join(impact['breaking_columns'])}")
         for c in changes:
-            marker = {"BREAKING": "✗", "WARN": "⚠", "COMPATIBLE": "✓"}.get(c["severity"], "?")
+            marker = {"CRITICAL": "✗✗", "BREAKING": "✗", "WARN": "⚠", "COMPATIBLE": "✓"}.get(c["severity"], "?")
             print(f"    {marker} [{c['severity']:10s}] {c['column']:40s} {c['change_type']}")
 
     # Write report
@@ -299,10 +469,13 @@ if __name__ == "__main__":
     parser.add_argument("--snapshots",   default="schema_snapshots/", help="Snapshot directory root")
     parser.add_argument("--output",      default="migration_reports/", help="Output directory")
     parser.add_argument("--all",         action="store_true", help="Analyze all contracts in snapshot dir")
+    parser.add_argument("--since",       default=None, help="Only diff snapshots after this ISO date (e.g. 2025-01-01)")
+    parser.add_argument("--registry",    default=None, help="Path to consumer registry YAML (default: contract_registry/subscriptions.yaml)")
     args = parser.parse_args()
 
     snap_root = ROOT / args.snapshots
     out_path  = ROOT / args.output
+    reg_path  = Path(args.registry) if args.registry else REGISTRY_PATH
 
     # If --output ends with .json, collect all reports into a single file
     single_file = str(out_path).endswith(".json")
@@ -312,11 +485,11 @@ if __name__ == "__main__":
     if args.all or not args.contract_id:
         contract_dirs = [d for d in snap_root.iterdir() if d.is_dir()]
         for d in sorted(contract_dirs):
-            reports = analyze(d.name, snap_root, out_root)
+            reports = analyze(d.name, snap_root, out_root, since=args.since, registry_path=reg_path)
             if single_file and reports:
                 all_reports.extend(reports)
     else:
-        reports = analyze(args.contract_id, snap_root, out_root)
+        reports = analyze(args.contract_id, snap_root, out_root, since=args.since, registry_path=reg_path)
         if single_file and reports:
             all_reports.extend(reports)
 
