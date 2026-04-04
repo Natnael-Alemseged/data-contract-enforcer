@@ -17,6 +17,7 @@ Usage:
 import argparse
 import json
 import os
+import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -36,6 +37,7 @@ load_dotenv()
 ROOT = Path(__file__).parent.parent
 BASELINE_PATH = ROOT / "schema_snapshots" / "embedding_baselines.npz"
 QUARANTINE_PATH = ROOT / "outputs" / "quarantine"
+VIOLATIONS_PATH = ROOT / "violation_log" / "violations.jsonl"
 
 
 def now_iso() -> str:
@@ -261,6 +263,32 @@ def run_ai_extensions(
     results["output_violation_rate"] = violation_result
     print(f"  [3] output violation rate: {violation_result['violation_rate']:.4f} "
           f"({violation_result['schema_violations']}/{violation_result['total_outputs']})")
+
+    # Write WARN/FAIL results to violation log
+    ai_checks = [
+        ("ai_ext.embedding_drift", drift_result),
+        ("ai_ext.prompt_input_validation", prompt_result),
+        ("ai_ext.output_violation_rate", violation_result),
+    ]
+    violations_to_log = []
+    for check_id, result in ai_checks:
+        status = result.get("status", "")
+        if status in ("WARN", "FAIL"):
+            violations_to_log.append({
+                "violation_id": str(uuid.uuid4()),
+                "check_id": check_id,
+                "severity": "HIGH" if status == "FAIL" else "MEDIUM",
+                "status": status,
+                "detected_at": now_iso(),
+                "detail": {k: v for k, v in result.items() if k != "status"},
+            })
+
+    if violations_to_log:
+        VIOLATIONS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        with open(VIOLATIONS_PATH, "a") as f:
+            for v in violations_to_log:
+                f.write(json.dumps(v) + "\n")
+        print(f"  [ai_extensions] logged {len(violations_to_log)} violation(s) to {VIOLATIONS_PATH}")
 
     # Write output
     output_path.parent.mkdir(parents=True, exist_ok=True)
