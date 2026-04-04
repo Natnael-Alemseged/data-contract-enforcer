@@ -203,11 +203,36 @@ def build_blame_chain(commits: list[dict], lineage_hops: int) -> list[dict]:
     return chain
 
 
-# ── blast radius ──────────────────────────────────────────────────────────────
+# ── registry blast radius (PRIMARY source) ───────────────────────────────────
 
-def compute_blast_radius(failing_column: str, graph: dict, records_failing: int) -> dict:
+def registry_blast_radius(contract_id: str, failing_field: str, registry_path: Path | None) -> list[dict]:
+    """Query the contract registry for subscribers affected by a breaking field change."""
+    if not registry_path or not registry_path.exists():
+        return []
+    with open(registry_path) as f:
+        registry = yaml.safe_load(f)
+    affected = []
+    for sub in registry.get("subscriptions", []):
+        if sub["contract_id"] != contract_id:
+            continue
+        for bf in sub.get("breaking_fields", []):
+            if bf["field"] == failing_field or failing_field.startswith(bf["field"]) or bf["field"].startswith(failing_field):
+                affected.append({
+                    "subscriber_id": sub["subscriber_id"],
+                    "contact": sub.get("contact", "unknown"),
+                    "validation_mode": sub.get("validation_mode", "AUDIT"),
+                    "reason": bf["reason"],
+                })
+                break
+    return affected
+
+
+# ── lineage enrichment (transitive depth) ────────────────────────────────────
+
+def compute_lineage_enrichment(failing_column: str, graph: dict) -> dict:
     """
-    BFS forward from the failing node to find all affected downstream nodes.
+    BFS forward from the failing node to find transitive contamination depth.
+    This is enrichment — the registry is the primary blast radius source.
     """
     nodes = graph["nodes"]
     produces = graph["produces"]
@@ -228,30 +253,40 @@ def compute_blast_radius(failing_column: str, graph: dict, records_failing: int)
 
     visited = set()
     queue = deque(anchors)
-    affected = []
-    affected_pipelines = []
+    direct = []
+    transitive = []
+    depth = 0
+    max_depth = 0
 
-    while queue:
-        node_id = queue.popleft()
-        if node_id in visited:
-            continue
-        visited.add(node_id)
-        node = nodes.get(node_id, {})
-        affected.append(node_id)
-        if node.get("type") == "MODEL":
-            affected_pipelines.append(node_id)
+    # BFS with depth tracking
+    frontier = set(anchors)
+    while frontier:
+        next_frontier = set()
+        depth += 1
+        for node_id in frontier:
+            if node_id in visited:
+                continue
+            visited.add(node_id)
+            if depth == 1:
+                direct.append(node_id)
+            else:
+                transitive.append(node_id)
+            max_depth = max(max_depth, depth)
 
-        for downstream in produces.get(node_id, []):
-            if downstream not in visited:
-                queue.append(downstream)
-        for downstream in consumed_by.get(node_id, []):
-            if downstream not in visited:
-                queue.append(downstream)
+            for downstream in produces.get(node_id, []):
+                if downstream not in visited:
+                    next_frontier.add(downstream)
+            for downstream in consumed_by.get(node_id, []):
+                if downstream not in visited:
+                    next_frontier.add(downstream)
+        frontier = next_frontier
+        if depth > 5:
+            break
 
     return {
-        "affected_nodes":     affected[:10],
-        "affected_pipelines": affected_pipelines[:5],
-        "estimated_records":  records_failing,
+        "direct": direct[:10],
+        "transitive": transitive[:10],
+        "max_depth": max_depth,
     }
 
 
@@ -262,6 +297,7 @@ def attribute_violations(
     lineage_path: Path,
     repo_path: Path | None,
     output_dir: Path,
+    registry_path: Path | None = None,
 ) -> list[dict]:
     output_dir.mkdir(parents=True, exist_ok=True)
 
@@ -323,7 +359,20 @@ def attribute_violations(
             }]
 
         blame_chain = build_blame_chain(all_commits, lineage_hops)
-        blast_radius = compute_blast_radius(col, graph, records_failing)
+
+        # Step 1: Registry blast radius (PRIMARY source)
+        reg_blast = registry_blast_radius(contract_id, col, registry_path)
+        # Step 2: Lineage enrichment (transitive depth)
+        lineage_enrichment = compute_lineage_enrichment(col, graph)
+
+        blast_radius = {
+            "source": "registry",
+            "direct_subscribers": reg_blast,
+            "transitive_nodes": lineage_enrichment["transitive"],
+            "contamination_depth": lineage_enrichment["max_depth"],
+            "estimated_records": records_failing,
+            "note": "direct_subscribers from registry; transitive_nodes from lineage graph enrichment",
+        }
 
         violation = {
             "violation_id":  rng_uuid(),
@@ -356,7 +405,9 @@ def attribute_violations(
             top = v["blame_chain"][0]
             print(f"    top blame: {top['commit_hash'][:8]} by {top['author']} "
                   f"(confidence={top['confidence_score']}) — {top['commit_message'][:60]}")
-        print(f"    blast radius: {len(v['blast_radius']['affected_nodes'])} nodes, "
+        subs = v["blast_radius"].get("direct_subscribers", [])
+        print(f"    blast radius: {len(subs)} registry subscriber(s), "
+              f"depth={v['blast_radius']['contamination_depth']}, "
               f"~{v['blast_radius']['estimated_records']} records")
 
     return violations
@@ -366,8 +417,9 @@ def attribute_violations(
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="ViolationAttributor — trace violations to origin commits")
-    parser.add_argument("--report",   required=True, help="Path to ValidationRunner JSON report")
+    parser.add_argument("--report", "--violation", required=True, help="Path to ValidationRunner JSON report")
     parser.add_argument("--lineage",  default=str(LINEAGE_PATH), help="Path to lineage_snapshots.jsonl")
+    parser.add_argument("--registry", default=None, help="Path to contract_registry/subscriptions.yaml")
     parser.add_argument("--repo-path", help="Path to cloned source repo for git blame (optional)")
     parser.add_argument("--output",   default="violation_log/", help="Output directory")
     args = parser.parse_args()
@@ -385,4 +437,5 @@ if __name__ == "__main__":
             lineage_path=Path(args.lineage),
             repo_path=Path(args.repo_path) if args.repo_path else None,
             output_dir=Path(args.output),
+            registry_path=Path(args.registry) if args.registry else None,
         )
