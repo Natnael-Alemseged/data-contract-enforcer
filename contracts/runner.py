@@ -504,6 +504,7 @@ def run_validation(
     data_path: Path,
     output_dir: Path,
     inject: str | None = None,
+    mode: str = "AUDIT",
 ) -> dict:
     output_dir.mkdir(parents=True, exist_ok=True)
     report_id   = rng_uuid()
@@ -621,12 +622,25 @@ def run_validation(
     for r in results:
         status_counts[r["status"]] = status_counts.get(r["status"], 0) + 1
 
+    # Determine pipeline_action based on mode
+    has_critical = any(r["severity"] == "CRITICAL" and r["status"] == "FAIL" for r in results)
+    has_high = any(r["severity"] == "HIGH" and r["status"] == "FAIL" for r in results)
+
+    if mode == "AUDIT":
+        pipeline_action = "PASS"
+    elif mode == "WARN":
+        pipeline_action = "BLOCK" if has_critical else ("WARN" if has_high else "PASS")
+    else:  # ENFORCE
+        pipeline_action = "BLOCK" if (has_critical or has_high) else "PASS"
+
     report = {
         "report_id":    report_id,
         "contract_id":  contract_id,
         "snapshot_id":  snapshot_id,
         "run_timestamp": run_ts,
         "data_path":    str(data_path),
+        "mode":         mode,
+        "pipeline_action": pipeline_action,
         "injected_violation": inject,
         "total_checks": len(results),
         "passed":       status_counts["PASS"],
@@ -678,6 +692,8 @@ if __name__ == "__main__":
     parser.add_argument("--contract", required=True)
     parser.add_argument("--data",     required=True)
     parser.add_argument("--output",   required=True)
+    parser.add_argument("--mode",     choices=["AUDIT", "WARN", "ENFORCE"], default="AUDIT",
+                        help="Enforcement mode: AUDIT (log only), WARN (block CRITICAL), ENFORCE (block CRITICAL+HIGH)")
     parser.add_argument("--inject-violation", dest="inject",
                         choices=["confidence_scale", "missing_required", "bad_enum"],
                         help="Inject a known violation for testing")
@@ -688,4 +704,5 @@ if __name__ == "__main__":
         data_path=Path(args.data),
         output_dir=Path(args.output),
         inject=args.inject,
+        mode=args.mode,
     )
