@@ -100,8 +100,14 @@ def compute_health_score(reports: list[dict]) -> tuple[int, list[dict]]:
         return 100, all_fails
 
     base_score = round((passed / total_checks) * 100)
+    # Per rubric: adjusted down by 20 points per CRITICAL violation
+    # Additional graduated deductions for HIGH/MEDIUM/LOW via SEVERITY_DEDUCTIONS
     critical_count = sum(1 for f in all_fails if f.get("severity") == "CRITICAL")
-    score = max(0, min(100, base_score - (critical_count * 20)))
+    other_deduction = sum(
+        SEVERITY_DEDUCTIONS.get(f.get("severity", "LOW"), 0)
+        for f in all_fails if f.get("severity") != "CRITICAL"
+    )
+    score = max(0, min(100, base_score - (critical_count * 20) - other_deduction))
 
     return score, all_fails
 
@@ -171,29 +177,43 @@ def generate_report() -> dict:
     for evo in schema_evo:
         for change in evo.get("changes", []):
             schema_changes.append(change)
-    breaking_changes = [c for c in schema_changes if c.get("compatibility") == "BREAKING"]
+    breaking_changes = [c for c in schema_changes
+                        if c.get("compatibility") == "BREAKING"
+                        or c.get("severity") in ("BREAKING", "CRITICAL")]
 
     # Section 4: AI risk
     embedding_drift = ai.get("embedding_drift", {})
     output_viol = ai.get("output_violation_rate", {})
     prompt_val = ai.get("prompt_input_validation", {})
 
-    # Section 5: Recommendations (with real file paths from this repository)
+    # Section 5: Recommendations (derive file paths from validation data)
+    # Extract actual data_path from validation reports that had failures
+    failing_data_paths = set()
+    for rep in reports:
+        has_fails = any(r.get("status") in ("FAIL", "ERROR") for r in rep.get("results", []))
+        if has_fails:
+            dp = rep.get("data_path") or rep.get("metadata", {}).get("data_path")
+            if dp:
+                failing_data_paths.add(dp)
+
     recommendations = []
     if critical_count > 0:
         for f in top_fails:
             if f.get("severity") == "CRITICAL":
                 col = f.get("column_name", "unknown")
                 check_id = f.get("check_id", "")
+                # Use actual failing data path if available
+                data_ref = next(iter(failing_data_paths), "the source data file")
                 recommendations.append(
-                    f"Fix {col} in outputs/week3/extractions.jsonl: {f.get('message', 'check failed')} "
+                    f"Fix {col} in {data_ref}: {f.get('message', 'check failed')} "
                     f"(contract clause: {check_id}). Ensure confidence values are float 0.0-1.0."
                 )
                 break
     if not recommendations:
+        data_ref = next(iter(failing_data_paths), "the source data file")
         recommendations.append(
-            "Update outputs/week3/extractions.jsonl confidence values to float 0.0-1.0 "
-            "per contract week3-document-refinery-extractions clause extracted_facts.confidence.range"
+            f"Review {data_ref} for contract compliance. "
+            "Ensure all field values conform to their contract-specified ranges and types."
         )
     recommendations.append(
         "Add contracts/runner.py --mode ENFORCE as a required CI step before any deployment. "
@@ -304,9 +324,11 @@ def generate_markdown(data: dict, violations: list, schema_changes: list, regist
                      f"{data['breaking_changes']} classified as BREAKING.")
         lines.append("")
         for c in schema_changes[:5]:
-            compat = c.get("compatibility", "UNKNOWN")
-            lines.append(f"- **{c.get('field', 'unknown')}**: {c.get('change_type', 'unknown')} "
-                        f"({compat}) — {c.get('description', '')}")
+            compat = c.get("compatibility") or c.get("severity", "UNKNOWN")
+            col = c.get("field") or c.get("column", "unknown")
+            desc = c.get("description") or c.get("detail", "")
+            lines.append(f"- **{col}**: {c.get('change_type', 'unknown')} "
+                        f"({compat}) — {desc}")
         lines.append("")
     else:
         lines.append("No schema changes detected in the reporting period.")
